@@ -6,12 +6,12 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "orders")
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class Order {
 
@@ -22,8 +22,13 @@ public class Order {
     private User user;
 
     private Integer totalPrice;
+
     @JsonIgnore
-    @OneToOne(fetch = jakarta.persistence.FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItem> orderItems = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
 
@@ -32,8 +37,7 @@ public class Order {
 
     private LocalDateTime createdAt;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> orderItems;
+
 
     @PrePersist
     public void prePersist() {

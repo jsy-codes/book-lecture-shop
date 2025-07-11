@@ -1,5 +1,6 @@
 package com.jsy_codes.book_lecture_shop.domain;
 
+import com.jsy_codes.book_lecture_shop.domain.user.Grade;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -23,18 +24,21 @@ public class User {
 
     private String name;
 
+    @Embedded
+    private Address address;
+
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Grade grade;
+
+    private int orderCount = 0;  // 주문 횟수 저장
 
     private LocalDateTime createdAt;
 
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
-        if (role == null) role = Role.USER;
+        if (grade == null) grade = grade.BASIC;
     }
 
-    public enum Role {
-        USER, ADMIN
-    }
+
 }
