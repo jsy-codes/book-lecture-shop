@@ -1,35 +1,62 @@
 package com.jsy_codes.book_lecture_shop.controller;
 
+import com.jsy_codes.book_lecture_shop.domain.Address;
+import com.jsy_codes.book_lecture_shop.domain.PhoneNumber;
 import com.jsy_codes.book_lecture_shop.domain.User;
+import com.jsy_codes.book_lecture_shop.dto.UserDto;
 import com.jsy_codes.book_lecture_shop.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
 public class AuthController {
+
     private final UserService userService;
 
-    /**
-     * 로그인 페이지 반환
-     */
-    @GetMapping("/login")
-    public String loginForm(Model model) {
-        return "login"; // login.html 템플릿 반환
+    // 회원가입 폼 보여주기
+    @GetMapping("/register")
+    public String showRegisterForm(Model model) {
+        model.addAttribute("userRegisterDto", new UserDto());
+        return "auth/register";
     }
 
-    /**
-     * 현재 로그인한 사용자 정보 가져오기
-     */
-    public User getLoggedInMember() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getName() != null) {
-            return userService.findByEmail(authentication.getName()); // ID 기반으로 DB에서 조회
+    // 회원가입 처리
+    @PostMapping("/register")
+    public String registerUser(@Valid UserDto userRegisterDto, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            return "auth/register";
         }
-        return null;
+
+        // User 엔티티 생성
+        User user = User.builder()
+                .email(userRegisterDto.getEmail())
+                .password(userRegisterDto.getPassword())  // TODO: 반드시 암호화 필요!
+                .name(userRegisterDto.getName())
+                .address(new Address(
+                        userRegisterDto.getCity(),
+                        userRegisterDto.getStreet(),
+                        userRegisterDto.getZipcode()
+                ))
+                .phoneNumber(new PhoneNumber(
+                        userRegisterDto.getCountryCode(),
+                        userRegisterDto.getAreaCode(),
+                        userRegisterDto.getSubscriberNumber()
+                ))
+                .build();
+
+        try {
+            userService.join(user);
+        } catch (IllegalStateException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "auth/register";
+        }
+
+        return "redirect:/login";
     }
 }

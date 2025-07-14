@@ -1,6 +1,6 @@
 package com.jsy_codes.book_lecture_shop.repository;
 
-import com.jsy_codes.book_lecture_shop.domain.item.Item;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
