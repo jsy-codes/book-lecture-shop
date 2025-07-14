@@ -42,7 +42,7 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
-    public List<User> findById(String id) {return  userRepository.findById(id);}
+    //public List<User> findByEmail(String id) {return  userRepository.findByEmail(id);}
 
 //    public void updateBalance(User user,int balance) {
 //        if (user != null) {

@@ -30,6 +30,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Grade grade;
 
+    @Embedded
+    private PhoneNumber phoneNumber;
+
     private int orderCount = 0;  // 주문 횟수 저장
 
     private LocalDateTime createdAt;

@@ -10,7 +10,14 @@ public class UserDto {
     private String email;
     private String password;
     private String name;
-    private Address address;
+
+    private String countryCode;
+    private String areaCode;
+    private String subscriberNumber;
+
+    private String city;
+    private String street;
+    private String zipcode;
 }
 
 
