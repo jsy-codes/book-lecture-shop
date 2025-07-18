@@ -1,8 +1,10 @@
 package com.jsy_codes.book_lecture_shop.repository;
 
 import com.jsy_codes.book_lecture_shop.domain.User;
+import com.jsy_codes.book_lecture_shop.dto.UserDto;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import jakarta.persistence.EntityManager;
@@ -14,6 +16,12 @@ import java.util.Optional;
 public class UserRepository {
 
     private final EntityManager em;
+    private final PasswordEncoder passwordEncoder;
+    public void passwordEncode(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.changePassword(encodedPassword); // setter 대신 명확한 메서드
+
+    }
 
     public void save(User user) {
         em.persist(user);

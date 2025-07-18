@@ -42,6 +42,9 @@ public class User {
         createdAt = LocalDateTime.now();
         if (grade == null) grade = grade.BASIC;
     }
+    public void changePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 
 
 }

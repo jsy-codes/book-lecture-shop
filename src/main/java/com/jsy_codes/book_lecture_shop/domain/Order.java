@@ -12,6 +12,7 @@ import java.util.ArrayList;
 @Table(name = "orders")
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Order {
 

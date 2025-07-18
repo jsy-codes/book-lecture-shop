@@ -7,6 +7,8 @@ import com.jsy_codes.book_lecture_shop.dto.UserDto;
 import com.jsy_codes.book_lecture_shop.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AuthController {
 
     private final UserService userService;
+
 
     // 회원가입 폼 보여주기
     @GetMapping("/register")
@@ -36,7 +39,7 @@ public class AuthController {
         // User 엔티티 생성
         User user = User.builder()
                 .email(userRegisterDto.getEmail())
-                .password(userRegisterDto.getPassword())  // TODO: 반드시 암호화 필요!
+                .password(userRegisterDto.getPassword())
                 .name(userRegisterDto.getName())
                 .address(new Address(
                         userRegisterDto.getCity(),
@@ -58,5 +61,18 @@ public class AuthController {
         }
 
         return "redirect:/login";
+    }
+    @GetMapping("/login")
+    public String showLoginForm(Model model) {
+        return "auth/login";
+    }
+
+
+    public User getLoggedUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getName() != null) {
+            return userService.findByEmail(auth.getName());
+        }
+        return null;
     }
 }
