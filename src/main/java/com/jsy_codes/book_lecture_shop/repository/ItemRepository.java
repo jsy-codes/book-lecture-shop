@@ -1,13 +1,7 @@
 //package com.jsy_codes.book_lecture_shop.repository;
 //
 //
-<<<<<<< HEAD
-<<<<<<< HEAD
 //import com.jsy_codes.book_lecture_shop.domain.item.Item;
-=======
->>>>>>> main
-=======
->>>>>>> v0.9.5
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.stereotype.Repository;
 //
