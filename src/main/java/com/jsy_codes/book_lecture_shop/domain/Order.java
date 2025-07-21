@@ -12,7 +12,6 @@ import java.util.ArrayList;
 @Table(name = "orders")
 @Getter @Setter
 @NoArgsConstructor
-@Builder
 public class Order {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
