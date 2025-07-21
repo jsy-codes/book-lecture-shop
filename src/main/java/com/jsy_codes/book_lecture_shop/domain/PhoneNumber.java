@@ -16,8 +16,6 @@ public class PhoneNumber {
     private String subscriberNumber;
 
     public String fullNumber() {
-
         return countryCode + areaCode + subscriberNumber;
-
     }
 }

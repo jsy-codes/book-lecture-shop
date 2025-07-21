@@ -2,6 +2,7 @@ package com.jsy_codes.book_lecture_shop.service;
 
 
 import com.jsy_codes.book_lecture_shop.domain.User;
+import com.jsy_codes.book_lecture_shop.dto.UserDto;
 import com.jsy_codes.book_lecture_shop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,14 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-
     /**
      * 회원 가입
      */
     @Transactional
     public Long join(User User) {
-        validateDuplicateUser(User); //중복 회원 검증
+
+        validateDuplicateUser(User); //중복회원 검증
+        userRepository.passwordEncode(User);
         userRepository.save(User);
         return User.getId();
     }
@@ -41,6 +43,8 @@ public class UserService {
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
+
+
 
     //public List<User> findByEmail(String id) {return  userRepository.findByEmail(id);}
 
