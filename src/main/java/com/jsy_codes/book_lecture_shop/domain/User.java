@@ -1,6 +1,6 @@
 package com.jsy_codes.book_lecture_shop.domain;
 
-import com.jsy_codes.book_lecture_shop.domain.user.Grade;
+import com.jsy_codes.book_lecture_shop.domain.user.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -28,7 +28,7 @@ public class User {
     private Address address;
 
     @Enumerated(EnumType.STRING)
-    private Grade grade;
+    private Role role;
 
     @Embedded
     private PhoneNumber phoneNumber;
@@ -40,7 +40,7 @@ public class User {
     @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
-        if (grade == null) grade = grade.BASIC;
+        if (role == null) role = role.USER;
     }
     public void changePassword(String encodedPassword) {
         this.password = encodedPassword;
