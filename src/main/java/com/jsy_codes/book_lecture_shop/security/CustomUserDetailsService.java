@@ -34,4 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .roles(domainUser.getRole().name())      // 권한 설정
                 .build();
     }
+
+
+
 }
