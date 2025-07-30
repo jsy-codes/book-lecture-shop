@@ -8,32 +8,23 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "dtype")
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter @Setter
 public abstract class Post {
+
     @Id
-    @GeneratedValue
-    @Column(name = "post_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Entity
-    @Inheritance(strategy = InheritanceType.JOINED)  // 또는 SINGLE_TABLE, TABLE_PER_CLASS
-    public abstract class Post {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
 
-        protected String title;
+    protected String title;
 
-        protected String content;
+    protected String content;
 
-        @ManyToOne
-        protected User writer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id")
+    protected User writer;
 
-        protected LocalDateTime createdAt;
-    }
-
-
+    protected LocalDateTime createdAt;
 
 
 

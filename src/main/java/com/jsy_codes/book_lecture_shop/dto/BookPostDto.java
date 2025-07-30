@@ -7,7 +7,7 @@ import lombok.Setter;
 public class BookPostDto {
     private String title;
     private String content;
-    private int price;
     private String bookImageUrl;
+    private int price;
     private int stock;
 }

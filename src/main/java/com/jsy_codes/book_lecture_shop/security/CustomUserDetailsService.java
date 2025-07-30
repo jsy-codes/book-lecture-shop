@@ -1,7 +1,8 @@
-package com.jsy_codes.book_lecture_shop.service;
+package com.jsy_codes.book_lecture_shop.security;
 
 import com.jsy_codes.book_lecture_shop.domain.User;
 
+import com.jsy_codes.book_lecture_shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -2,12 +2,14 @@ package com.jsy_codes.book_lecture_shop.service;
 
 
 import com.jsy_codes.book_lecture_shop.domain.User;
+import com.jsy_codes.book_lecture_shop.domain.user.Role;
 import com.jsy_codes.book_lecture_shop.dto.UserDto;
 import com.jsy_codes.book_lecture_shop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -42,6 +44,13 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public boolean hasAnyRole(User user, Role... allowedRoles) {
+        if (user == null) return false;
+
+        return Arrays.stream(allowedRoles)
+                .anyMatch(role -> role == user.getRole());
     }
 
 
