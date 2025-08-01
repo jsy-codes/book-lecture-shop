@@ -2,6 +2,7 @@ package com.jsy_codes.book_lecture_shop.security;
 
 
 import com.jsy_codes.book_lecture_shop.domain.User;
+import com.jsy_codes.book_lecture_shop.domain.user.Role;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +26,9 @@ public class CustomUserDetails implements UserDetails {
 
     public Long getUserId() {
         return user.getId();
+    }
+    public Role getRole() {
+        return user.getRole();
     }
 
     // UserDetails 메서드

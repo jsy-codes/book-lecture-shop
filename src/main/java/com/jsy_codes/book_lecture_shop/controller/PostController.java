@@ -26,38 +26,37 @@ public class PostController {
     private final UserService userService;
 
     //book
-    @GetMapping("/post/books")
+    @GetMapping("/books")
     public String books(Model model,@AuthenticationPrincipal CustomUserDetails userDetails) {
         List<BookPost> bookPosts = bookPostService.findAll();
         model.addAttribute("bookPosts", bookPosts);
-
-        return "post/books";
+        model.addAttribute("loginUser", userDetails.getUser());
+        return "post/books/book-list";
     }
-    @GetMapping("/post/books/wirte")
+    @GetMapping("/books/wirte")
     public String showBooksWirteform(@AuthenticationPrincipal CustomUserDetails userDetails) throws AccessDeniedException {
         if(userDetails == null) {
             throw new AccessDeniedException("로그인이 필요합니다.");
         }
-        Role role = userDetails.getUser().getRole();
-        if(!(role == Role.ADMIN || role == Role.AUTHOR)) {
+       User user = userDetails.getUser();
+        if(!userService.hasAnyRole(user, Role.ADMIN,Role.AUTHOR)) {
             throw new AccessDeniedException("로그인이 필요합니다.");
         }
-        return "/post/book-write-form";
+        return "/post/books/book-write-form";
 
     }
-    @PostMapping("/post/books/write")
+    @PostMapping("/books/write")
     public String saveBookPost(@AuthenticationPrincipal CustomUserDetails userDetails,
                                @ModelAttribute BookPostDto bookPostDto,
                                Model model) {
         User user = userDetails.getUser();
-
-        if (!userService.hasAnyRole(user, Role.AUTHOR, Role.ADMIN)) {
-            model.addAttribute("error", "글쓰기 권한이 없습니다.");
-            return "error/403"; // 또는 경고 페이지로 이동
+        try {
+            Long postId = bookPostService.createBookPost(bookPostDto);
+            return "redirect:/post/books/book-list" + postId;
+        } catch (AccessDeniedException e) {
+            model.addAttribute("error", "접근 권한이 없습니다.");
+            return "error/403";
         }
-
-        bookPostService.createBookPost(bookPostDto);
-        return "redirect:/post/books";
     }
 
 

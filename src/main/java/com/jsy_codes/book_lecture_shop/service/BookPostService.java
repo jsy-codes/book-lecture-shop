@@ -21,7 +21,7 @@ public class BookPostService {
 
     private final BookPostRepository bookPostRepository;
     private final UserRepository userRepository;
-
+    private final UserService userService;
     @Transactional
     public Long createBookPost(BookPostDto dto) throws AccessDeniedException {
         Long userId = SecurityUtil.getCurrentUserId();
@@ -30,7 +30,7 @@ public class BookPostService {
             throw new IllegalArgumentException("사용자 없음");
         }
 
-        if (!user.getRole().equals(Role.AUTHOR) && !user.getRole().equals(Role.ADMIN)) {
+        if (!userService.hasAnyRole(user, Role.ADMIN,Role.AUTHOR)) {
             throw new AccessDeniedException("작성 권한 없음");
         }
 
@@ -46,6 +46,7 @@ public class BookPostService {
         bookPostRepository.save(post);
         return post.getId();
     }
+
     public List<BookPost> findAll() {
         return bookPostRepository.findAll();
     }

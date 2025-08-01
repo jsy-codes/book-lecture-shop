@@ -28,12 +28,13 @@ public class CustomUserDetailsService implements UserDetailsService {
            // domainUser.setRO(Grade.VIP);
         }
 
-        // Spring Security UserDetails 객체 생성 및 반환
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(domainUser.getEmail())          // 인증 키로 이메일 사용
-                .password(domainUser.getPassword())      // 이미 암호화된 비밀번호
-                .roles(domainUser.getRole().name())      // 권한 설정
-                .build();
+//        // Spring Security UserDetails 객체 생성 및 반환
+//        return org.springframework.security.core.userdetails.User.builder()
+//                .username(domainUser.getEmail())          // 인증 키로 이메일 사용
+//                .password(domainUser.getPassword())      // 이미 암호화된 비밀번호
+//                .roles(domainUser.getRole().name())      // 권한 설정
+//                .build();
+        return new CustomUserDetails(domainUser);
     }
 
 

@@ -1,52 +1,87 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>도서 게시글 목록</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bookify</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .banner {
+            height: 300px;
+            background-color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+        }
+        .community-preview {
+            padding: 2rem;
+        }
+    </style>
 </head>
 <body>
-<div class="container-fluid mt-4">
-    <div class="row">
-        <!-- 왼쪽 카테고리 -->
-        <div class="col-md-3">
-            <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action active">카테고리</a>
-                <a href="#" class="list-group-item list-group-item-action">정보처리기사</a>
-                <a href="#" class="list-group-item list-group-item-action">SQLD</a>
-                <!-- 추후 카테고리 추가 -->
-            </div>
-        </div>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Bookify</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarContent" aria-controls="navbarContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <!-- 오른쪽 게시글 목록 -->
-        <div class="col-md-9">
-            <div class="d-flex justify-content-end mb-3">
-                <a th:if="${loginUser != null and (loginUser.role == 'AUTHOR' or loginUser.role == 'ADMIN')}"
-                   href="/post/books/write"
-                   class="btn btn-primary">글쓰기</a>
-            </div>
-
-            <div class="row row-cols-1 row-cols-md-2 g-4" th:if="${bookPosts != null}">
-                <div class="col" th:each="post : ${bookPosts}">
-                    <div class="card h-100">
-                        <img th:src="${post.bookImageUrl}" class="card-img-top" alt="책 이미지" style="height: 200px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${post.title}">책 제목</h5>
-                            <p class="card-text" th:text="${post.content}">책 설명</p>
-                            <p class="card-text">
-                                <strong>가격:</strong> <span th:text="${post.price}">0</span>원<br>
-                                <strong>재고:</strong> <span th:text="${post.stock}">0</span>권
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div th:if="${bookPosts == null or #lists.isEmpty(bookPosts)}">
-                <p>등록된 게시글이 없습니다.</p>
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <!-- 인강 -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="lectureDropdown" role="button" data-bs-toggle="dropdown">
+                        인강
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">SQLD</a></li>
+                        <li><a class="dropdown-item" href="#">정보처리기사</a></li>
+                    </ul>
+                </li>
+                <!-- 도서 구매 -->
+                <li class="nav-item">
+                    <a class="nav-link" href="/books">도서 구매</a>
+                </li>
+                <!-- 커뮤니티 -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="communityDropdown" role="button" data-bs-toggle="dropdown">
+                        커뮤니티
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">공지사항</a></li>
+                        <li><a class="dropdown-item" href="#">질의응답</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <!-- 로그인 버튼 -->
+            <div class="d-flex">
+                <a class="btn btn-outline-primary" href="/login">로그인</a>
             </div>
         </div>
     </div>
+</nav>
+
+<!-- Banner (임시 영역) -->
+<div class="container-fluid banner my-3">
+    배너 이미지 슬라이드 자리
+</div>
+
+<!-- 커뮤니티 미리보기 -->
+<div class="container community-preview">
+    <h4>🔥 최신 커뮤니티 글</h4>
+    <ul class="list-group">
+        <li class="list-group-item">[공지] Bookify 사이트 오픈 안내</li>
+        <li class="list-group-item">SQLD 공부 순서 좀 알려주세요</li>
+        <li class="list-group-item">정보처리기사 실기 준비 어떻게 하세요?</li>
+    </ul>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
