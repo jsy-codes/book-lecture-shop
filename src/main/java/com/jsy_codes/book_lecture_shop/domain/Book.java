@@ -17,17 +17,10 @@ public class Book {
     private Long id;
 
     private String title;
-
     private String author;
-
-    private Integer price;
-
-    private Integer stock;
-
-    @Lob
-    private String description;
-
-    private String imageUrl;
+    private Integer price;      // 정가
+    private Integer stock;      // 총 재고 수 (관리자가 직접 관리)
+    private String isbn;
 
     private LocalDateTime createdAt;
 

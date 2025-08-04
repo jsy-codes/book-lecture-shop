@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter @Setter
@@ -20,7 +21,6 @@ public abstract class Post {
     private CategoryType category;
 
     protected String title;
-
     protected String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,8 +29,8 @@ public abstract class Post {
 
     protected LocalDateTime createdAt;
 
-
-
-
-
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

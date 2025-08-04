@@ -37,7 +37,7 @@ public class BookPostService {
         BookPost post = new BookPost();
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
-        post.setBookImage(dto.getBookImageUrl());
+        post.setBookImageUrl(dto.getBookImageUrl());
         post.setPrice(dto.getPrice());
         post.setStock(dto.getStock());
         post.setWriter(user);
@@ -49,5 +49,9 @@ public class BookPostService {
 
     public List<BookPost> findAll() {
         return bookPostRepository.findAll();
+    }
+
+    public BookPost getBookPostById(Long id) {
+        return bookPostRepository.getBookPostById(id);
     }
 }
