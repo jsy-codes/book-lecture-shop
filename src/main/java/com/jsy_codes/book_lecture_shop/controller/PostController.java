@@ -67,7 +67,7 @@ public class PostController {
         }
 
         model.addAttribute("bookPost", bookPost);
-        return "books/book-detail"; // 보여줄 뷰 이름 (예: book-detail.html)
+        return "post/books/book-detail"; // 보여줄 뷰 이름
     }
 
 

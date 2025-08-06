@@ -1,4 +1,4 @@
-package com.jsy_codes.book_lecture_shop.domain;
+package com.jsy_codes.book_lecture_shop.domain.item;
 
 
 import jakarta.persistence.*;

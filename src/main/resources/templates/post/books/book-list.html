@@ -28,21 +28,23 @@
 
             <div class="row row-cols-1 row-cols-md-2 g-4" th:if="${bookPosts != null}">
                 <div class="col" th:each="post : ${bookPosts}">
-                    <div class="card h-100">
-                        <img th:src="${post.bookImageUrl}"
-                             onerror="this.onerror=null; this.src='/images/default-book.png';"
-                             alt="책 이미지"
-                             class="img-thumbnail"
-                             style="width: 200px; height: auto;" />
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${post.title}">책 제목</h5>
-                            <p class="card-text" th:text="${post.content}">책 설명</p>
-                            <p class="card-text">
-                                <strong>가격:</strong> <span th:text="${post.price}">0</span>원<br>
-                                <strong>재고:</strong> <span th:text="${post.stock}">0</span>권
-                            </p>
+                    <a th:href="@{/books/book-list/{id}(id=${post.id})}" class="text-decoration-none text-dark">
+                        <div class="card h-100">
+                            <img th:src="${post.bookImageUrl}"
+                                 onerror="this.onerror=null; this.src='/images/default-book.png';"
+                                 alt="책 이미지"
+                                 class="img-thumbnail"
+                                 style="width: 200px; height: auto;" />
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${post.title}">책 제목</h5>
+                                <p class="card-text" th:text="${post.content}">책 설명</p>
+                                <p class="card-text">
+                                    <strong>가격:</strong> <span th:text="${post.price}">0</span>원<br>
+                                    <strong>재고:</strong> <span th:text="${post.stock}">0</span>권
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
 

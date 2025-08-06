@@ -4,6 +4,7 @@ package com.jsy_codes.book_lecture_shop.repository;
 import com.jsy_codes.book_lecture_shop.domain.post.BookPost;
 import com.jsy_codes.book_lecture_shop.dto.BookPostDto;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -29,9 +30,13 @@ public class BookPostRepository {
     }
 
     public BookPost getBookPostById(Long id) {
-        return em.createQuery("select b from BookPost b where b.id = :id", BookPost.class)
-                .setParameter("id", id)
-                .getSingleResult();
+        try {
+            return em.createQuery("select b from BookPost b where b.id = :id", BookPost.class)
+                    .setParameter("id", id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
     /*
     public BookPost findById(Long id) {
