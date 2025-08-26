@@ -1,9 +1,12 @@
 package com.jsy_codes.book_lecture_shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jsy_codes.book_lecture_shop.domain.user.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -14,6 +17,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -32,6 +36,10 @@ public class User {
 
     @Embedded
     private PhoneNumber phoneNumber;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders = new ArrayList<>();
 
     private int orderCount = 0;  // 주문 횟수 저장
 

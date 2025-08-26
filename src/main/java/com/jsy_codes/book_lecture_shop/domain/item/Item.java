@@ -1,13 +1,11 @@
 package com.jsy_codes.book_lecture_shop.domain.item;
 
 
+import com.jsy_codes.book_lecture_shop.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -24,8 +22,8 @@ public abstract class Item {
     private int price;
     private int stockQuantity;
 
-    @ManyToMany(mappedBy = "items")
-    //private List<Category> categories = new ArrayList<>();
+//    @ManyToMany(mappedBy = "items")
+//    private List<Category> categories = new ArrayList<>();
 
     //==비즈니스 로직==//
     /**

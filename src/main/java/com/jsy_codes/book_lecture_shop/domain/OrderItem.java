@@ -1,33 +1,58 @@
 package com.jsy_codes.book_lecture_shop.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jsy_codes.book_lecture_shop.domain.item.Item;
 import jakarta.persistence.*;
 import lombok.*;
 
+import static jakarta.persistence.FetchType.LAZY;
+
+
 @Entity
-@Table(name = "order_items")
 @Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue
+    @Column(name = "order_item_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "item_id")
+    private Item item;
+
+    @JsonIgnore
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "order_id")
     private Order order;
 
-    @Enumerated(EnumType.STRING)
-    private ProductType productType;
+    private int orderPrice; //주문 가격
 
-    private Long productId;
+    private int count; //주문 수량
 
-    private Integer quantity;
+    //==생성 메서드==//
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+        item.removeStock(count);
+        return orderItem;
+    }
 
-    private Integer unitPrice;
+    //==비즈니스 로직==//
+    public void cancel() {
+        getItem().addStock(count);
+    }
 
-    public enum ProductType {
-        BOOK, LECTURE
+    //==조회 로직==//
+
+    /**
+     * 주문상품 전체 가격 조회
+     */
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
     }
 }
