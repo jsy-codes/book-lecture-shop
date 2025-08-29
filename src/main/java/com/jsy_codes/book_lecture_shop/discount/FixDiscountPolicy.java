@@ -1,8 +1,8 @@
 package com.jsy_codes.book_lecture_shop.discount;
 
 
-import com.cornCar.jpaShop.domain.Member;
-import com.cornCar.jpaShop.domain.member.Grade;
+
+import com.jsy_codes.book_lecture_shop.domain.User;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -11,11 +11,7 @@ import org.springframework.stereotype.Component;
 public class FixDiscountPolicy implements DiscountPolicy{
     private int discountFixAmount = 1000;
     @Override
-    public int discount(Member member, int price){
-        if(member.getGrade()== Grade.VIP){
+    public int discount(User user, int price){
             return discountFixAmount;
-        }else{
-            return 0;
-        }
     }
 }

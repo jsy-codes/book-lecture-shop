@@ -1,9 +1,8 @@
 package com.jsy_codes.book_lecture_shop.discount;
 
 
-import com.cornCar.jpaShop.domain.Member;
-import com.cornCar.jpaShop.annotation.MainDiscountPolicy;
-import com.cornCar.jpaShop.domain.member.Grade;
+import com.jsy_codes.book_lecture_shop.annotation.MainDiscountPolicy;
+import com.jsy_codes.book_lecture_shop.domain.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,11 +10,7 @@ import org.springframework.stereotype.Component;
 public class RateDiscountPolicy implements DiscountPolicy{
     private int discountPercent = 10;
     @Override
-    public int discount(Member member, int price) {
-        if(member.getGrade()== Grade.VIP){
-            return price*discountPercent/100;
-        }else {
-            return 0;
-        }
+    public int discount(User user, int price) {
+        return price*discountPercent/100;
     }
 }

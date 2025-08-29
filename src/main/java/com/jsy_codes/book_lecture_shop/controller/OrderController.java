@@ -5,7 +5,12 @@ import com.jsy_codes.book_lecture_shop.domain.Order;
 import com.jsy_codes.book_lecture_shop.domain.User;
 import com.jsy_codes.book_lecture_shop.domain.item.Item;
 import com.jsy_codes.book_lecture_shop.repository.OrderSearch;
+import com.jsy_codes.book_lecture_shop.security.CustomUserDetails;
+import com.jsy_codes.book_lecture_shop.service.ItemService;
+import com.jsy_codes.book_lecture_shop.service.OrderService;
+import com.jsy_codes.book_lecture_shop.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +22,13 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-    private final MemberService memberService;
+    private final UserService userService;
     private final ItemService itemService;
 
     @GetMapping("/order")
     public String createForm(Model model) {
 
-        List<User> users = memberService.findMembers();
+        List<User> users = userService.findUsers();
         List<Item> items = itemService.findItems();
 
         model.addAttribute("users", users);
@@ -31,22 +36,31 @@ public class OrderController {
 
         return "order/orderForm";
     }
-
     @PostMapping("/order")
-    public String order(@RequestParam("userId") String userId,
+    public String order(@RequestParam("memberId") String memberId,
                         @RequestParam("itemId") Long itemId,
                         @RequestParam("count") int count) {
 
-        orderService.order(userId, itemId, count);
+        orderService.order(memberId, itemId, count);
+        return "redirect:/orders";
+    }
+
+    @PostMapping("/orders")
+    public String order(@AuthenticationPrincipal CustomUserDetails userDetails,
+                        @RequestParam("itemId") Long itemId,
+                        @RequestParam("count") int count) {
+
+        orderService.order(userDetails.getUser().getEmail(), itemId, count);
         return "redirect:/orders";
     }
 
     @GetMapping("/orders")
     public String orderList(@ModelAttribute("orderSearch") OrderSearch orderSearch, Model model) {
         List<Order> orders = orderService.findOrders(orderSearch);
-        model.addAttribute("orders", orders);
 
+        model.addAttribute("orders", orders);
         return "order/orderList";
+
     }
 
     @PostMapping("/orders/{orderId}/cancel")

@@ -61,7 +61,7 @@ public class OrderService {
         int totalPrice = order.getTotalPrice();
         int discountPrice = getDiscount(User, totalPrice);
         order.setStatus(OrderStatus.ORDER);
-        User.updatedBalance(totalPrice-discountPrice);
+       // User.updatedBalance(totalPrice-discountPrice);
         User.setOrderCount(User.getOrderCount()+1);
         order.setOrderDate(LocalDateTime.now());
         return order;

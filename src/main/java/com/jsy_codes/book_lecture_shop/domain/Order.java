@@ -36,15 +36,31 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status; //주문상태 [PENDING, PAID, CANCELLED]
 
-    private LocalDateTime createdAt;
+    private LocalDateTime orderDate;
 
 
 
 
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        if (status == null) status = OrderStatus.PENDING;
+//    @PrePersist
+//    public void prePersist() {
+//        orderDate = LocalDateTime.now();
+//        if (status == null) status = OrderStatus.PENDING;
+//    }
+        //==생성 메서드==//
+    public static Order createOrder(User user, Delivery delivery, OrderItem... orderItems) {
+        Order order = new Order();
+        order.setUser(user);
+        order.setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        int totalPrice = order.getTotalPrice();
+       // int discountPrice = orderService.getDiscount(user, totalPrice);
+        order.setStatus(OrderStatus.ORDER);
+       // user.updatedBalance(totalPrice-discountPrice);
+        user.setOrderCount(user.getOrderCount()+1);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
     }
 
 
@@ -67,18 +83,18 @@ public class Order {
     }
 
 //    //==생성 메서드==//
-//    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+//    public static Order createOrder(user user, Delivery delivery, OrderItem... orderItems) {
 //        Order order = new Order();
-//        order.setMember(member);
+//        order.setuser(user);
 //        order.setDelivery(delivery);
 //        for (OrderItem orderItem : orderItems) {
 //            order.addOrderItem(orderItem);
 //        }
 //        int totalPrice = order.getTotalPrice();
-//        int discountPrice = orderService.getDiscount(member, totalPrice);
+//        int discountPrice = orderService.getDiscount(user, totalPrice);
 //        order.setStatus(OrderStatus.ORDER);
-//        member.updatedBalance(totalPrice-discountPrice);
-//        member.setOrderCount(member.getOrderCount()+1);
+//        user.updatedBalance(totalPrice-discountPrice);
+//        user.setOrderCount(user.getOrderCount()+1);
 //        order.setOrderDate(LocalDateTime.now());
 //        return order;
 //    }
