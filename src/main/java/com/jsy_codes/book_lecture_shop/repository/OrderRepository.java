@@ -8,6 +8,7 @@ import com.jsy_codes.book_lecture_shop.domain.Order;
 import com.jsy_codes.book_lecture_shop.domain.User;
 //import jakarta.persistence.criteria.*;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -63,7 +64,7 @@ public class OrderRepository {
             } else {
                 jpql += " and";
             }
-            jpql += " m.name like :name";
+            jpql += " u.name like :name";
         }
 
         TypedQuery<Order> query = em.createQuery(jpql, Order.class)

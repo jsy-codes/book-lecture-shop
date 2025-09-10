@@ -6,6 +6,7 @@ import com.jsy_codes.book_lecture_shop.domain.user.Role;
 import com.jsy_codes.book_lecture_shop.dto.BookPostDto;
 import com.jsy_codes.book_lecture_shop.security.CustomUserDetails;
 import com.jsy_codes.book_lecture_shop.service.BookPostService;
+import com.jsy_codes.book_lecture_shop.service.ItemService;
 import com.jsy_codes.book_lecture_shop.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -52,7 +53,9 @@ public class PostController {
                                Model model) {
        // User user = userDetails.getUser();
         try {
+
             Long postId = bookPostService.createBookPost(bookPostDto);
+
             return "redirect:books/book-list/" + postId;
         } catch (AccessDeniedException e) {
             model.addAttribute("error", "접근 권한이 없습니다.");

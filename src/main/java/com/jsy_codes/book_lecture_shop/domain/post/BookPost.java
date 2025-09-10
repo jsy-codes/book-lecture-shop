@@ -11,10 +11,8 @@ import lombok.Setter;
 @Entity
 @Getter @Setter
 public class BookPost extends Post {
+
     private String bookImageUrl;
-    private int price;
-    private int stock;
     @ManyToOne(fetch = FetchType.LAZY)
     private Book book; // 어떤 책을 파는지 연결
-
 }

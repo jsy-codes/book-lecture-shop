@@ -7,10 +7,16 @@ import lombok.Setter;
 
 @Getter @Setter
 public class BookPostDto {
+
+
+    private int price;
+    private int stockQuantity;
+
+    private String author;
+    private String isbn;
+
     private String title;
     private String content;
     private CategoryType category;
     private String bookImageUrl;
-    private int price;
-    private int stock;
 }
