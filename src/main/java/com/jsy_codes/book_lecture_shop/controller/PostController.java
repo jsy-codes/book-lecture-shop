@@ -51,7 +51,7 @@ public class PostController {
     public String saveBookPost(@AuthenticationPrincipal CustomUserDetails userDetails,
                                @ModelAttribute BookPostDto bookPostDto,
                                Model model) {
-       // User user = userDetails.getUser();
+       User user = userDetails.getUser();
         try {
 
             Long postId = bookPostService.createBookPost(bookPostDto);

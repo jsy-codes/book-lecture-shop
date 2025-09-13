@@ -1,6 +1,7 @@
 package com.jsy_codes.book_lecture_shop.dto;
 
 
+import com.jsy_codes.book_lecture_shop.domain.User;
 import com.jsy_codes.book_lecture_shop.domain.post.Category.CategoryType;
 import lombok.Getter;
 import lombok.Setter;
