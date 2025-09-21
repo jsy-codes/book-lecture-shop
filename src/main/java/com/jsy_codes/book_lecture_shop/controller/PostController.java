@@ -56,13 +56,13 @@ public class PostController {
 
             Long postId = bookPostService.createBookPost(bookPostDto);
 
-            return "redirect:books/book-list/" + postId;
+            return "redirect:/books/book-list/" + postId;
         } catch (AccessDeniedException e) {
             model.addAttribute("error", "접근 권한이 없습니다.");
             return "error/403";
         }
     }
-    @GetMapping("/books/book-list/{id}")
+    @GetMapping("books/book-list/{id}")
     public String getBookPost(@PathVariable Long id, Model model) {
         BookPost bookPost = bookPostService.getBookPostById(id);
         if (bookPost == null) {
