@@ -37,25 +37,26 @@ public class OrderController {
         return "order/orderForm";
     }
     @PostMapping("/order")
-    public String order(@RequestParam("memberId") String memberId,
-                        @RequestParam("itemId") Long itemId,
-                        @RequestParam("count") int count) {
-
-        orderService.order(memberId, itemId, count);
-        return "redirect:/orders";
-    }
-
-    @PostMapping("/orders")
     public String order(@AuthenticationPrincipal CustomUserDetails userDetails,
                         @RequestParam("itemId") Long itemId,
                         @RequestParam("count") int count) {
 
-        orderService.order(userDetails.getUser().getEmail(), itemId, count);
+        orderService.order(userDetails.getUserId(), itemId, count);
+        return "redirect:/orders";
+    }
+
+    @PostMapping("/orders")
+    public String orderSearch(@AuthenticationPrincipal CustomUserDetails userDetails,
+                        @RequestParam("itemId") Long itemId,
+                        @RequestParam("count") int count) {
+
+        orderService.order(userDetails.getUserId(), itemId, count);
         return "redirect:/orders";
     }
 
     @GetMapping("/orders")
-    public String orderList(@ModelAttribute("orderSearch") OrderSearch orderSearch, Model model) {
+    public String orderList(@AuthenticationPrincipal CustomUserDetails userDetails,@ModelAttribute("orderSearch") OrderSearch orderSearch, Model model) {
+        orderSearch.setEmail(userDetails.getUsername());
         List<Order> orders = orderService.findOrders(orderSearch);
 
         model.addAttribute("orders", orders);

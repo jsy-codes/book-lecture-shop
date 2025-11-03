@@ -30,6 +30,10 @@ public class UserService {
         return User.getId();
     }
 
+    public void findById(Long id) {
+        userRepository.findById(id);
+    }
+
     private void validateDuplicateUser(User User) {
         List<User> findUsers = userRepository.findByIdWithList(User.getId());
         if (!findUsers.isEmpty()) {

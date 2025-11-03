@@ -34,7 +34,7 @@ public class OrderRepository {
         em.persist(order);
     }
 
-    public Order findByUsername(Long id) {
+    public Order findById(Long id) {
         return em.find(Order.class, id);
     }
 
@@ -42,9 +42,9 @@ public class OrderRepository {
 
     public List<Order> findAllByString(OrderSearch orderSearch) {
 
-            String jpql = "select o from Order o join o.user u";
-            boolean isFirstCondition = true;
-
+        String jpql = "select o from Order o join o.user u";
+        boolean isFirstCondition = true;
+        System.out.println("orderSearch = " + orderSearch.getOrderStatus()+" "+orderSearch.getEmail());
         //주문 상태 검색
         if (orderSearch.getOrderStatus() != null) {
             if (isFirstCondition) {
@@ -57,14 +57,14 @@ public class OrderRepository {
         }
 
         //회원 이름 검색
-        if (StringUtils.hasText(orderSearch.getUserName())) {
+        if (StringUtils.hasText(orderSearch.getEmail())) {
             if (isFirstCondition) {
                 jpql += " where";
                 isFirstCondition = false;
             } else {
                 jpql += " and";
             }
-            jpql += " u.name like :name";
+            jpql += " u.email = :email";
         }
 
         TypedQuery<Order> query = em.createQuery(jpql, Order.class)
@@ -73,8 +73,8 @@ public class OrderRepository {
         if (orderSearch.getOrderStatus() != null) {
             query = query.setParameter("status", orderSearch.getOrderStatus());
         }
-        if (StringUtils.hasText(orderSearch.getUserName())) {
-            query = query.setParameter("name", orderSearch.getUserName());
+        if (StringUtils.hasText(orderSearch.getEmail())) {
+            query = query.setParameter("email", orderSearch.getEmail());
         }
 
         return query.getResultList();

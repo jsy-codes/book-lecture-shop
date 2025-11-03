@@ -56,6 +56,12 @@ public class BookPostService {
         bookPostRepository.save(post);
         return post.getId();
     }
+    @Transactional
+    public Long createBookPostInit(BookPostDto dto, User writer) {
+
+       return bookPostRepository.createBookPostInit(dto,writer);
+    }
+
 
     public List<BookPost> findAll() {
         return bookPostRepository.findAll();

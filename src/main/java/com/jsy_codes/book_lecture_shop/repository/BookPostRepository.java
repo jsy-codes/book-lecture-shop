@@ -1,6 +1,8 @@
 package com.jsy_codes.book_lecture_shop.repository;
 
 
+import com.jsy_codes.book_lecture_shop.domain.User;
+import com.jsy_codes.book_lecture_shop.domain.item.Book;
 import com.jsy_codes.book_lecture_shop.domain.post.BookPost;
 import com.jsy_codes.book_lecture_shop.dto.BookPostDto;
 import jakarta.persistence.EntityManager;
@@ -37,6 +39,32 @@ public class BookPostRepository {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    public Long createBookPostInit(BookPostDto dto, User writer) {
+        // 1.Book 엔티티 생성
+        Book book = new Book();
+        book.setName(dto.getTitle());
+        book.setAuthor(dto.getAuthor());
+        book.setPrice(dto.getPrice());
+        book.setStockQuantity(dto.getStockQuantity());
+        book.setIsbn(dto.getIsbn());
+
+        em.persist(book);
+
+        // 2.BookPost 생성
+        BookPost post = new BookPost();
+        post.setBook(book);
+        post.setBookImageUrl(dto.getBookImageUrl());
+
+        post.setTitle(dto.getTitle());
+        post.setContent(dto.getContent());
+        post.setCategory(dto.getCategory());
+        post.setWriter(writer); // Post 필드 writer
+
+        em.persist(post);
+
+        return post.getId();
     }
     /*
     public BookPost findById(Long id) {

@@ -28,22 +28,22 @@ public class OrderService {
      * 주문
      */
     @Transactional
-    public Long order(String userEmail, Long itemId, int count) {
+    public Long order(Long userId, Long itemId, int count) {
 
         //엔티티 조회
-        User User = userRepository.findByEmail(userEmail);
+        User user = userRepository.findById(userId);
         Item item = itemRepository.findByUsername(itemId);
 
         //배송정보 생성
         Delivery delivery = new Delivery();
-        delivery.setAddress(User.getAddress());
+        delivery.setAddress(user.getAddress());
         delivery.setStatus(DeliveryStatus.READY);
 
         //주문상품 생성
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
 
         //주문 생성
-        Order order = createOrder(User, delivery, orderItem);
+        Order order = createOrder(user, delivery, orderItem);
 
         //주문 저장
         orderRepository.save(order);
@@ -51,18 +51,19 @@ public class OrderService {
         return order.getId();
     }
     //==생성 메서드==//
-    public Order createOrder(User User, Delivery delivery, OrderItem... orderItems) {
+    public Order createOrder(User user, Delivery delivery, OrderItem... orderItems) {
         Order order = new Order();
-        order.setUser(User);
+        order.setUser(user);
         order.setDelivery(delivery);
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
         int totalPrice = order.getTotalPrice();
-        int discountPrice = getDiscount(User, totalPrice);
+        int discountPrice = getDiscount(user, totalPrice);
         order.setStatus(OrderStatus.ORDER);
-       // User.updatedBalance(totalPrice-discountPrice);
-        User.setOrderCount(User.getOrderCount()+1);
+
+       // user.updatedBalance(totalPrice-discountPrice);
+       // user.setOrderCount(User.getOrderCount()+1);
         order.setOrderDate(LocalDateTime.now());
         return order;
     }
@@ -73,7 +74,7 @@ public class OrderService {
     @Transactional
     public void cancelOrder(Long orderId) {
         //주문 엔티티 조회
-        Order order = orderRepository.findByUsername(orderId);
+        Order order = orderRepository.findById(orderId);
         //주문 취소
         order.cancel();
     }

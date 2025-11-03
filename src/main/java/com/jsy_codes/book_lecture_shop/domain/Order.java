@@ -34,7 +34,7 @@ public class Order {
     private Delivery delivery;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus status; //주문상태 [PENDING, PAID, CANCELLED]
+    private OrderStatus status; //주문상태 [ORDER, CANCELLED]
 
     private LocalDateTime orderDate;
 
@@ -108,7 +108,7 @@ public class Order {
             throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
         }
 
-        this.setStatus(OrderStatus.CANCELLED);
+        this.setStatus(OrderStatus.CANCEL);
         for (OrderItem orderItem : orderItems) {
             orderItem.cancel();
         }
