@@ -22,6 +22,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+
     public int getDiscount(User User,int price){ return orderRepository.discount(User,price); }
 
     /**

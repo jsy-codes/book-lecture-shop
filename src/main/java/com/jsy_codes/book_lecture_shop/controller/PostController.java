@@ -2,6 +2,7 @@ package com.jsy_codes.book_lecture_shop.controller;
 
 import com.jsy_codes.book_lecture_shop.domain.User;
 import com.jsy_codes.book_lecture_shop.domain.post.BookPost;
+import com.jsy_codes.book_lecture_shop.domain.post.Category.CategoryType;
 import com.jsy_codes.book_lecture_shop.domain.user.Role;
 import com.jsy_codes.book_lecture_shop.dto.BookPostDto;
 import com.jsy_codes.book_lecture_shop.security.CustomUserDetails;
@@ -12,10 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -29,12 +27,22 @@ public class PostController {
 
     //book
     @GetMapping("/books")
-    public String books(Model model,@AuthenticationPrincipal CustomUserDetails userDetails) {
-        List<BookPost> bookPosts = bookPostService.findAll();
+    public String books(@RequestParam(value = "category",required = false)String category, Model model,
+                        @AuthenticationPrincipal CustomUserDetails userDetails) {
+        System.out.println("category = " + category);
+
+        List<BookPost> bookPosts;
+        if(category == null||category.isEmpty()) {
+            bookPosts = bookPostService.findAll();
+        }else{
+            CategoryType categoryType = CategoryType.valueOf(category.toUpperCase());
+            bookPosts = bookPostService.findByCategory(categoryType);
+        }
         model.addAttribute("bookPosts", bookPosts);
         model.addAttribute("loginUser", userDetails.getUser());
         return "post/books/book-list";
     }
+
     @GetMapping("/books/write")
     public String showBooksWirteform(@AuthenticationPrincipal CustomUserDetails userDetails) throws AccessDeniedException {
         if(userDetails == null) {

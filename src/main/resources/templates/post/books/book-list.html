@@ -12,8 +12,8 @@
         <div class="col-md-3">
             <div class="list-group">
                 <a href="#" class="list-group-item list-group-item-action active">카테고리</a>
-                <a href="#" class="list-group-item list-group-item-action">정보처리기사</a>
-                <a href="#" class="list-group-item list-group-item-action">SQLD</a>
+                <a th:href="@{/books(category='INFO_PROCESS')}" class="list-group-item list-group-item-action">정보처리기사</a>
+                <a th:href="@{/books(category='SQLD')}" class="list-group-item list-group-item-action">SQLD</a>
                 <!-- 추후 카테고리 추가 -->
             </div>
         </div>
@@ -39,8 +39,8 @@
                                 <h5 class="card-title" th:text="${post.title}">책 제목</h5>
                                 <p class="card-text" th:text="${post.content}">책 설명</p>
                                 <p class="card-text">
-                                    <strong>가격:</strong> <span th:text="${post.price}">0</span>원<br>
-                                    <strong>재고:</strong> <span th:text="${post.stock}">0</span>권
+                                    <strong>가격:</strong> <span th:text="${post.book.price}">0</span>원<br>
+                                    <strong>재고:</strong> <span th:text="${post.book.stockQuantity}">0</span>권
                                 </p>
                             </div>
                         </div>

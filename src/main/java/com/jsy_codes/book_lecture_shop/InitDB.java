@@ -18,6 +18,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.security.access.AccessDeniedException;
+
+import java.time.LocalDateTime;
+
 /**
  * 초기 DB 세팅
  * * userA
