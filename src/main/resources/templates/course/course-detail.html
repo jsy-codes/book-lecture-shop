@@ -1,10 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title th:text="${course.title}">Course</title>
 </head>
 <body>
-$END$
+
+<h1 th:text="${course.title}">Course Title</h1>
+<p th:text="${course.subtitle}">Subtitle</p>
+<p th:text="${course.description}">Description</p>
+
+<h2>Episodes</h2>
+<ul>
+    <li th:each="ep : ${episodes}">
+        <span th:text="${ep.episodeOrder}">1</span>.
+        <span th:text="${ep.title}">Episode Title</span>
+        <a th:href="@{/courses/{c}/play/{e}(c=${course.id}, e=${ep.id})}">
+            ▶ Play
+        </a>
+    </li>
+</ul>
+
 </body>
 </html>

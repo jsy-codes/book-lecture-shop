@@ -1,12 +1,14 @@
 package com.jsy_codes.book_lecture_shop.controller;
 
 import com.jsy_codes.book_lecture_shop.domain.User;
+import com.jsy_codes.book_lecture_shop.domain.course.Course;
 import com.jsy_codes.book_lecture_shop.domain.post.BookPost;
 import com.jsy_codes.book_lecture_shop.domain.post.Category.CategoryType;
 import com.jsy_codes.book_lecture_shop.domain.user.Role;
 import com.jsy_codes.book_lecture_shop.dto.BookPostDto;
 import com.jsy_codes.book_lecture_shop.security.CustomUserDetails;
 import com.jsy_codes.book_lecture_shop.service.BookPostService;
+import com.jsy_codes.book_lecture_shop.service.CourseService;
 import com.jsy_codes.book_lecture_shop.service.ItemService;
 import com.jsy_codes.book_lecture_shop.service.UserService;
 import lombok.AllArgsConstructor;
@@ -24,7 +26,7 @@ public class PostController {
 
     private final BookPostService bookPostService;
     private final UserService userService;
-
+    private final CourseService courseService;
     //book
     @GetMapping("/books")
     public String books(@RequestParam(value = "category",required = false)String category, Model model,
@@ -44,7 +46,7 @@ public class PostController {
     }
 
     @GetMapping("/books/write")
-    public String showBooksWirteform(@AuthenticationPrincipal CustomUserDetails userDetails) throws AccessDeniedException {
+    public String showBooksWirteform(@AuthenticationPrincipal CustomUserDetails userDetails,Model model) throws AccessDeniedException {
         if(userDetails == null) {
             throw new AccessDeniedException("로그인이 필요합니다.");
         }
@@ -52,6 +54,7 @@ public class PostController {
         if(!userService.hasAnyRole(user, Role.ADMIN,Role.AUTHOR)) {
             throw new AccessDeniedException("로그인이 필요합니다.");
         }
+
         return "post/books/book-write-form";
 
     }
@@ -63,6 +66,8 @@ public class PostController {
         try {
 
             Long postId = bookPostService.createBookPost(bookPostDto);
+
+
 
             return "redirect:/books/book-list/" + postId;
         } catch (AccessDeniedException e) {

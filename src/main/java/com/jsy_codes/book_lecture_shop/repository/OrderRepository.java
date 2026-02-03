@@ -5,6 +5,7 @@ package com.jsy_codes.book_lecture_shop.repository;
 import com.jsy_codes.book_lecture_shop.annotation.MainDiscountPolicy;
 import com.jsy_codes.book_lecture_shop.discount.DiscountPolicy;
 import com.jsy_codes.book_lecture_shop.domain.Order;
+import com.jsy_codes.book_lecture_shop.domain.OrderStatus;
 import com.jsy_codes.book_lecture_shop.domain.User;
 //import jakarta.persistence.criteria.*;
 import lombok.Getter;
@@ -24,11 +25,31 @@ public class OrderRepository {
     private final EntityManager em;
     private final DiscountPolicy discountPolicy;
 
-
+//migration 예정
     public OrderRepository(EntityManager em,@MainDiscountPolicy DiscountPolicy discountPolicy) {
         this.discountPolicy = discountPolicy;
         this.em = em;
     }
+
+    public boolean existsByUserIdAndCourseId(Long userId, List<Long> bookIds) {
+        if(userId == null || bookIds.isEmpty()) return false;
+        Long count = em.createQuery("select count(o)" +
+                                        " from Order o" +
+                                        " join o.orderItems oi" +
+                                        " join oi.item i" +
+                                        " where o.user.id = :userid" +
+                                        "  and i.id in :bookIds" +
+                                        "  and o.status = :status",Long.class)
+                                        .setParameter("userid",userId)
+                                        .setParameter("bookIds",bookIds)
+                                        .setParameter("status", OrderStatus.ORDER)
+                                        .getSingleResult();
+        return count > 0;
+
+    }
+
+
+
 
     public void save(Order order) {
         em.persist(order);

@@ -6,7 +6,6 @@ import com.jsy_codes.book_lecture_shop.domain.post.BookPost;
 import com.jsy_codes.book_lecture_shop.domain.post.Category.CategoryType;
 import com.jsy_codes.book_lecture_shop.domain.user.Role;
 import com.jsy_codes.book_lecture_shop.dto.BookPostDto;
-import com.jsy_codes.book_lecture_shop.form.BookForm;
 import com.jsy_codes.book_lecture_shop.repository.BookPostRepository;
 import com.jsy_codes.book_lecture_shop.repository.UserRepository;
 import com.jsy_codes.book_lecture_shop.security.SecurityUtil;

@@ -1,4 +1,4 @@
-package com.jsy_codes.book_lecture_shop.security;
+package com.jsy_codes.book_lecture_shop.util;
 
 public class YoutubeUtil {
     public static String extractId(String url) {

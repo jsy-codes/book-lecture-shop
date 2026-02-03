@@ -1,6 +1,7 @@
 package com.jsy_codes.book_lecture_shop.repository;
 
 
+import com.jsy_codes.book_lecture_shop.domain.item.Book;
 import com.jsy_codes.book_lecture_shop.domain.item.Item;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -30,4 +31,6 @@ public class ItemRepository {
         return em.createQuery("select i from Item i", Item.class)
                 .getResultList();
     }
+
+
 }

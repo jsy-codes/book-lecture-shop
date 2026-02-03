@@ -106,7 +106,7 @@ public class InitDB {
             bookPostDto.setContent("DB 초기화용 도서입니다.");
             bookPostDto.setPrice(15000);
             bookPostDto.setStockQuantity(50);
-            bookPostDto.setAuthor("홍길동");
+            bookPostDto.setAuthor(admin);
             bookPostDto.setIsbn("978-89-000-0000-1");
             bookPostDto.setCategory(CategoryType.SQLD);
             bookPostDto.setBookImageUrl("/images/sample.jpg");

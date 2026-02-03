@@ -1,10 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>Create Course</title>
 </head>
 <body>
-$END$
+
+<h1>Create Course</h1>
+
+<form method="post" th:action="@{/courses}">
+
+    <div>
+        <input name="title" placeholder="Title" required>
+    </div>
+
+    <div>
+        <input name="subtitle" placeholder="Subtitle">
+    </div>
+
+    <div>
+        <textarea name="description" placeholder="Description"></textarea>
+    </div>
+
+    <hr>
+
+    <h3>📚 이 강의를 볼 수 있는 책</h3>
+
+    <div th:if="${#lists.isEmpty(books)}">
+        <p>등록된 책이 없습니다.</p>
+    </div>
+
+    <div th:each="book : ${books}">
+        <label>
+            <input type="checkbox"
+                   name="bookIds"
+                   th:value="${book.id}">
+            <span th:text="${book.name}"></span>
+        </label>
+    </div>
+
+    <br>
+
+    <button type="submit">Create</button>
+</form>
+
 </body>
 </html>

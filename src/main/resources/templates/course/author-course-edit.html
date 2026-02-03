@@ -1,10 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Edit Course</title>
 </head>
 <body>
-$END$
+
+<h1 th:text="${course.title}">Course</h1>
+<p>Status: <b th:text="${course.status}">DRAFT</b></p>
+
+<h2>Add Episode</h2>
+<form th:action="@{/author/courses/{id}/episodes(id=${course.id})}" method="post">
+  <input name="title" placeholder="Episode title" required>
+  <input name="order" type="number" placeholder="Order" required>
+  <input name="youtubeUrl" placeholder="YouTube URL" required>
+  <button type="submit">Add</button>
+</form>
+
+<h2>Episodes</h2>
+<ul>
+  <li th:each="ep : ${episodes}">
+    <span th:text="${ep.episodeOrder}">1</span>.
+    <span th:text="${ep.title}">Episode</span>
+  </li>
+</ul>
+
+<form th:action="@{/author/courses/{id}/publish(id=${course.id})}" method="post">
+  <button type="submit">Publish Course</button>
+</form>
+
 </body>
 </html>

@@ -1,11 +1,15 @@
 package com.jsy_codes.book_lecture_shop.domain.item;
 
 
+import com.jsy_codes.book_lecture_shop.domain.course.Course;
+import com.jsy_codes.book_lecture_shop.domain.course.ItemCourse;
 import com.jsy_codes.book_lecture_shop.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
 
 import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -21,6 +25,9 @@ public abstract class Item {
     private String name;
     private int price;
     private int stockQuantity;
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<ItemCourse> itemCourses;
+
 
 //    @ManyToMany(mappedBy = "items")
 //    private List<Category> categories = new ArrayList<>();

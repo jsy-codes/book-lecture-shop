@@ -55,7 +55,7 @@ public class BookPostRepository {
         book.setName(dto.getTitle());
         book.setPrice(dto.getPrice());
         book.setStockQuantity(dto.getStockQuantity());
-        book.setAuthor(dto.getAuthor());
+        book.setAuthor(writer);
         book.setIsbn(dto.getIsbn());
 
         itemRepository.save(book);
@@ -75,7 +75,7 @@ public class BookPostRepository {
         return post.getId();
     }
     /*
-    public BookPost findById(Long id) {
+public BookPost findById(Long id) {
         return em.find(BookPost.class, id);
     }*/
 

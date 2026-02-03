@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title th:text="${episode.title}">Player</title>
 </head>
 <body>
-$END$
+
+<h1 th:text="${episode.title}">Episode</h1>
+
+<iframe width="900" height="500"
+        th:src="'https://www.youtube.com/embed/' + ${youtubeId}"
+        frameborder="0"
+        allowfullscreen>
+</iframe>
+
+<p>
+  <a th:href="@{/courses/{id}(id=${episode.course.id})}">
+    ← Back to Course
+  </a>
+</p>
+
 </body>
 </html>

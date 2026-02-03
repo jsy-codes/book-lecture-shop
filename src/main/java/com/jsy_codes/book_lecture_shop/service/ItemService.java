@@ -1,5 +1,6 @@
 package com.jsy_codes.book_lecture_shop.service;
 
+import com.jsy_codes.book_lecture_shop.domain.item.Book;
 import com.jsy_codes.book_lecture_shop.domain.item.Item;
 import com.jsy_codes.book_lecture_shop.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,4 +38,8 @@ public class ItemService {
         return itemRepository.findByUsername(itemId);
     }
 
+
+    public List<Book> getBooksByAuthorId(Long userId) {
+        return itemRepository.getBooksByAuthorId(userId);
+    }
 }
