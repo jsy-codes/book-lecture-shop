@@ -2,6 +2,7 @@ package com.jsy_codes.book_lecture_shop.domain.course;
 
 import com.jsy_codes.book_lecture_shop.domain.User;
 import com.jsy_codes.book_lecture_shop.domain.item.Book;
+import com.jsy_codes.book_lecture_shop.domain.post.Category.CategoryType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +14,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@Builder
 public class Course {
 
     @Id @GeneratedValue
@@ -31,32 +31,38 @@ public class Course {
     @Enumerated(EnumType.STRING)
     private CourseStatus status;   // DRAFT, PUBLISHED, ARCHIVED
 
+    @Enumerated(EnumType.STRING)
+    private CategoryType categoryType;
+
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CourseEpisode> episodes = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemCourse> itemCourses = new ArrayList<>();
 
-    public static Course create(User author, String title, String subtitle, String description) {
-        return Course.builder()
-                .author(author)
-                .title(title)
-                .subtitle(subtitle)
-                .description(description)
-                .status(CourseStatus.DRAFT)
-                .createdAt(LocalDateTime.now())
-                .build();
+    public static Course create(User author,
+                                String title,
+                                String subtitle,
+                                String description,
+                                CategoryType category) {
+
+        Course course = new Course();
+        course.author = author;
+        course.title = title;
+        course.subtitle = subtitle;
+        course.description = description;
+        course.status = CourseStatus.DRAFT;
+        course.categoryType = category;
+        course.createdAt = LocalDateTime.now();
+
+        return course;
     }
 
     public void publish() {
         this.status = CourseStatus.PUBLISHED;
     }
-    public void addBook(Book book) {
-        ItemCourse itemCourse = new ItemCourse(book,this);
-        this.itemCourses.add(itemCourse);
 
-    }
 
 }

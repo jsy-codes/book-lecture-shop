@@ -45,7 +45,9 @@ public class CourseViewController {
             throw new AccessDeniedException("No access to this course");
         }
 
-        CourseEpisode episode = episodeService.getEpisode(episodeId);
+        CourseEpisode episode = episodeService.findByIdAndCourseId(courseId, episodeId);
+
+
         model.addAttribute("episode", episode);
 
         // 재생용 YouTube URL

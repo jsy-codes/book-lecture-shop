@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,8 +26,8 @@ public abstract class Item {
     private String name;
     private int price;
     private int stockQuantity;
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<ItemCourse> itemCourses;
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
+    private List<ItemCourse> itemCourses= new ArrayList<>();
 
 
 //    @ManyToMany(mappedBy = "items")

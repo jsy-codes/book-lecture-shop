@@ -33,7 +33,8 @@ public class OrderService {
 
         //엔티티 조회
         User user = userRepository.findById(userId);
-        Item item = itemRepository.findByUsername(itemId);
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new RuntimeException("item not found"));
 
         //배송정보 생성
         Delivery delivery = new Delivery();

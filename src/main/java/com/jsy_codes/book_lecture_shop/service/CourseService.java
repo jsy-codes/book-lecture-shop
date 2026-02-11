@@ -3,6 +3,7 @@ package com.jsy_codes.book_lecture_shop.service;
 import com.jsy_codes.book_lecture_shop.domain.User;
 import com.jsy_codes.book_lecture_shop.domain.course.Course;
 import com.jsy_codes.book_lecture_shop.domain.item.Item;
+import com.jsy_codes.book_lecture_shop.domain.post.Category.CategoryType;
 import com.jsy_codes.book_lecture_shop.repository.CourseRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ public class CourseService {
 
     private final CourseRepository courseRepository;
 
-    public Course createCourse(User author, String title, String subtitle, String description) {
-        Course course = Course.create(author, title, subtitle, description);
+    public Course createCourse(User author, String title, String subtitle, String description, CategoryType category) {
+        Course course = Course.create(author, title, subtitle, description,category);
         return courseRepository.save(course);
     }
 

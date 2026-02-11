@@ -29,8 +29,9 @@ public class CourseEpisodeService {
     public List<CourseEpisode> getEpisodes(Long courseId) {
         return episodeRepository.findByCourseIdOrderByEpisodeOrderAsc(courseId);
     }
-    public CourseEpisode getEpisode(Long courseId) {
-        return episodeRepository.findByCourseId(courseId);
+    public CourseEpisode findByIdAndCourseId(Long courseId,Long episodeId) {
+        return episodeRepository.findByIdAndCourseId(courseId,episodeId)
+                .orElseThrow(() -> new IllegalArgumentException("Episode not found"));
     }
 
 }

@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface CourseEpisodeRepository extends JpaRepository<CourseEpisode, Long> {
     List<CourseEpisode> findByCourseIdOrderByEpisodeOrderAsc(Long courseId);
-    CourseEpisode findByCourseId(Long courseId);
+    Optional<CourseEpisode> findByIdAndCourseId(Long episodeId, Long courseId);
+
 }

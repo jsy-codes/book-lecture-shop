@@ -24,7 +24,8 @@ public class ItemService {
 
     @Transactional
     public void updateItem(Long itemId, String name, int price, int stockQuantity) {
-        Item item = itemRepository.findByUsername(itemId);
+        Item item = itemRepository.findById(itemId)
+                        .orElseThrow(() -> new IllegalArgumentException("Item not found"));
         item.setName(name);
         item.setPrice(price);
         item.setStockQuantity(stockQuantity);
@@ -34,12 +35,11 @@ public class ItemService {
         return itemRepository.findAll();
     }
 
-    public Item findByUsername(Long itemId) {
-        return itemRepository.findByUsername(itemId);
+    public Item findById(Long itemId) {
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("Item not found"));
     }
 
 
-    public List<Book> getBooksByAuthorId(Long userId) {
-        return itemRepository.getBooksByAuthorId(userId);
-    }
+
 }

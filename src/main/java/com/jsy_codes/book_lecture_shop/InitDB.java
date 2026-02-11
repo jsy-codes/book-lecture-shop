@@ -121,13 +121,13 @@ public class InitDB {
                 return;
             }
 
-            // 4주문 생성 (admin 계정)
-            try {
-                orderService.order(admin.getId(), postId, 10);
-                System.out.println("주문 생성 완료: admin 주문 10권");
-            } catch (Exception e) {
-                System.out.println("주문 생성 실패: " + e.getMessage());
-            }
+//            // 4주문 생성 (admin 계정)
+//            try {
+//                orderService.order(admin.getId(), postId, 10);
+//                System.out.println("주문 생성 완료: admin 주문 10권");
+//            } catch (Exception e) {
+//                System.out.println("주문 생성 실패: " + e.getMessage());
+//            }
 
             System.out.println("InitDB3 완료!");
         }

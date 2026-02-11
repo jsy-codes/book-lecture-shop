@@ -13,6 +13,6 @@ public interface ItemCourseRepository extends JpaRepository<ItemCourse, Long> {
 
     @Query("select ic.item.id" +
             " from ItemCourse ic" +
-            " where ic.course.id = :courseid")
+            " where ic.course.id = :courseId")
     List<Long> findItemIdsByCourseId(Long courseId);
 }
