@@ -18,7 +18,7 @@ public abstract class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private CategoryType category;
+    private CategoryType categoryType;
 
     protected String title;
     protected String content;

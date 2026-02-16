@@ -29,17 +29,12 @@ public class PostController {
     private final CourseService courseService;
     //book
     @GetMapping("/books")
-    public String books(@RequestParam(value = "category",required = false)String category, Model model,
+    public String books(@RequestParam(value = "category",required = false)CategoryType categoryType, Model model,
                         @AuthenticationPrincipal CustomUserDetails userDetails) {
-        System.out.println("category = " + category);
 
         List<BookPost> bookPosts;
-        if(category == null||category.isEmpty()) {
-            bookPosts = bookPostService.findAll();
-        }else{
-            CategoryType categoryType = CategoryType.valueOf(category.toUpperCase());
-            bookPosts = bookPostService.findByCategory(categoryType);
-        }
+        bookPosts = bookPostService.getBookPostList(categoryType);
+
         model.addAttribute("bookPosts", bookPosts);
         model.addAttribute("loginUser", userDetails.getUser());
         return "post/books/book-list";

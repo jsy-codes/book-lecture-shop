@@ -2,6 +2,7 @@ package com.jsy_codes.book_lecture_shop.controller;
 
 import com.jsy_codes.book_lecture_shop.domain.course.Course;
 import com.jsy_codes.book_lecture_shop.domain.course.CourseEpisode;
+import com.jsy_codes.book_lecture_shop.domain.post.Category.CategoryType;
 import com.jsy_codes.book_lecture_shop.security.CustomUserDetails;
 import com.jsy_codes.book_lecture_shop.service.CourseEpisodeService;
 import com.jsy_codes.book_lecture_shop.service.CourseService;
@@ -12,10 +13,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.*;
 
 
 @Controller
@@ -26,6 +24,15 @@ public class CourseViewController {
     private final CourseService courseService;
     private final CourseEpisodeService episodeService;
     private final ItemCourseService itemCourseService;
+
+    @GetMapping
+    public String myCourses(@AuthenticationPrincipal CustomUserDetails user,
+                            @RequestParam(value = "category", required = false)CategoryType categoryType,
+                            Model model) {
+        model.addAttribute("courses", courseService.getCourseList(categoryType));
+        model.addAttribute("loginUser", user.getUser());
+        return "course/author-course-list";
+    }
 
     @GetMapping("/{courseId}")
     public String courseDetail(@PathVariable Long courseId, Model model) {

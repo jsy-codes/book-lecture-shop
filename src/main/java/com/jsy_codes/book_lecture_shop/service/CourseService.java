@@ -42,4 +42,10 @@ public class CourseService {
     }
 
 
+    public List<Course> getCourseList(CategoryType categoryType) {
+        if(categoryType == null){
+            return courseRepository.findAll();
+        }
+        return courseRepository.findByCategoryType(categoryType);
+    }
 }

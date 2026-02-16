@@ -82,7 +82,7 @@ public class InitDB {
 
         public void dbInit2() {
             User user = createUser(
-                    "user1@bokify.com", "password2",
+                    "user1@bookify.com", "password2",
                     "회원2", Role.USER,
                     new Address("서울", "강남", "123-456"),
                     new PhoneNumber("010", "9876", "5432")

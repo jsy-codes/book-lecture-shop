@@ -61,9 +61,6 @@ public class BookPostService {
 
        return bookPostRepository.createBookPostInit(dto,writer);
     }
-    public List<BookPost> findByCategory(CategoryType category) {
-        return bookPostRepository.findByCategory(category);
-    }
 
     public List<BookPost> findAll() {
         return bookPostRepository.findAll();
@@ -71,5 +68,12 @@ public class BookPostService {
 
     public BookPost getBookPostById(Long id) {
         return bookPostRepository.getBookPostById(id);
+    }
+
+    public List<BookPost> getBookPostList(CategoryType categoryType) {
+        if(categoryType == null){
+            return bookPostRepository.findAll();
+        }
+        return bookPostRepository.findByCategoryType(categoryType);
     }
 }

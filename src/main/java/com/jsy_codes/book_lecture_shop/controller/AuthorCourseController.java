@@ -29,13 +29,7 @@ public class AuthorCourseController {
     private final ItemService itemService;
     private final BookService bookService;
 
-    @GetMapping
-    public String myCourses(Model model, @AuthenticationPrincipal CustomUserDetails user) {
 
-
-        model.addAttribute("courses", courseService.getByAuthorId(user.getUserId()));
-        return "course/author-course-list";
-    }
 
     @GetMapping("/new")
     public String createForm(Model model, @AuthenticationPrincipal CustomUserDetails user) {

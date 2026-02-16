@@ -43,9 +43,9 @@ public class BookPostRepository {
             return null;
         }
     }
-    public List<BookPost> findByCategory(CategoryType category) {
-        return em.createQuery("SELECT b from BookPost b where b.category = :category",BookPost.class)
-                .setParameter("category",category)
+    public List<BookPost> findByCategoryType(CategoryType categoryType) {
+        return em.createQuery("SELECT b from BookPost b where b.categoryType = :categoryType",BookPost.class)
+                .setParameter("categoryType",categoryType)
                 .getResultList();
 
     }
@@ -66,7 +66,7 @@ public class BookPostRepository {
         post.setContent(dto.getContent());
         post.setBookImageUrl(dto.getBookImageUrl());
         post.setBook(book);
-        post.setCategory(dto.getCategory());
+        post.setCategoryType(dto.getCategory());
         post.setWriter(writer);
         post.setCreatedAt(LocalDateTime.now());
 
@@ -74,6 +74,8 @@ public class BookPostRepository {
 
         return post.getId();
     }
+
+
     /*
 public BookPost findById(Long id) {
         return em.find(BookPost.class, id);

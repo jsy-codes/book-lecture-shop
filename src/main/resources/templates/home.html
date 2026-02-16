@@ -38,12 +38,12 @@
             <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
                 <!-- 인강 -->
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="lectureDropdown" role="button" data-bs-toggle="dropdown">
+                    <a class="nav-link dropdown-toggle" th:href="@{/courses}" id="lectureDropdown" role="button" data-bs-toggle="dropdown">
                         인강
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">SQLD</a></li>
-                        <li><a class="dropdown-item" href="#">정보처리기사</a></li>
+                        <li><a class="dropdown-item" th:href="@{/courses(category='SQLD')}">SQLD</a></li>
+                        <li><a class="dropdown-item" th:href="@{/courses(category='INFO_PROCESS')}">정보처리기사</a></li>
                     </ul>
                 </li>
                 <!-- 도서 구매 -->
