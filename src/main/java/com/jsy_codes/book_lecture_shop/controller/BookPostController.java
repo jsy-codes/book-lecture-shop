@@ -18,16 +18,17 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.AccessDeniedException;
 import java.util.List;
 
+
 @Controller
 @AllArgsConstructor
-public class PostController {
+public class BookPostController {
 
     private final BookPostService bookPostService;
     private final UserService userService;
     private final CourseService courseService;
     //book
     @GetMapping("/books")
-    public String books(@RequestParam(value = "category",required = false)CategoryType categoryType, Model model,
+    public String books(@RequestParam(value = "category",required = false) CategoryType categoryType, Model model,
                         @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         List<BookPost> bookPosts;
@@ -43,7 +44,7 @@ public class PostController {
         if(userDetails == null) {
             throw new AccessDeniedException("로그인이 필요합니다.");
         }
-       User user = userDetails.getUser();
+        User user = userDetails.getUser();
         if(!userService.hasAnyRole(user, Role.ADMIN,Role.AUTHOR)) {
             throw new AccessDeniedException("로그인이 필요합니다.");
         }
@@ -55,7 +56,7 @@ public class PostController {
     public String saveBookPost(@AuthenticationPrincipal CustomUserDetails userDetails,
                                @ModelAttribute BookPostDto bookPostDto,
                                Model model) {
-       User user = userDetails.getUser();
+        User user = userDetails.getUser();
         try {
 
             Long postId = bookPostService.createBookPost(bookPostDto);

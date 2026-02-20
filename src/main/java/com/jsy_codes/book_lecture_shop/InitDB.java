@@ -2,12 +2,10 @@ package com.jsy_codes.book_lecture_shop;
 
 import com.jsy_codes.book_lecture_shop.domain.*;
 import com.jsy_codes.book_lecture_shop.domain.item.Book;
-import com.jsy_codes.book_lecture_shop.domain.post.BookPost;
-import com.jsy_codes.book_lecture_shop.domain.post.Category.CategoryType;
+import com.jsy_codes.book_lecture_shop.domain.post.category.CategoryType;
 import com.jsy_codes.book_lecture_shop.domain.user.Role;
 import com.jsy_codes.book_lecture_shop.dto.BookPostDto;
 import com.jsy_codes.book_lecture_shop.service.BookPostService;
-import com.jsy_codes.book_lecture_shop.service.ItemService;
 import com.jsy_codes.book_lecture_shop.service.OrderService;
 import com.jsy_codes.book_lecture_shop.service.UserService;
 import jakarta.annotation.PostConstruct;
@@ -18,8 +16,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import org.springframework.security.access.AccessDeniedException;
-
-import java.time.LocalDateTime;
 
 /**
  * 초기 DB 세팅

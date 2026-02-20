@@ -2,7 +2,7 @@ package com.jsy_codes.book_lecture_shop.repository;
 
 import com.jsy_codes.book_lecture_shop.domain.course.Course;
 import com.jsy_codes.book_lecture_shop.domain.course.CourseStatus;
-import com.jsy_codes.book_lecture_shop.domain.post.Category.CategoryType;
+import com.jsy_codes.book_lecture_shop.domain.post.category.CategoryType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -2,7 +2,7 @@ package com.jsy_codes.book_lecture_shop.controller;
 
 import com.jsy_codes.book_lecture_shop.domain.course.Course;
 import com.jsy_codes.book_lecture_shop.domain.course.CourseEpisode;
-import com.jsy_codes.book_lecture_shop.domain.post.Category.CategoryType;
+import com.jsy_codes.book_lecture_shop.domain.post.category.CategoryType;
 import com.jsy_codes.book_lecture_shop.security.CustomUserDetails;
 import com.jsy_codes.book_lecture_shop.service.CourseEpisodeService;
 import com.jsy_codes.book_lecture_shop.service.CourseService;
