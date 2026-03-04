@@ -2,6 +2,7 @@ package com.jsy_codes.book_lecture_shop.controller;
 
 import com.jsy_codes.book_lecture_shop.domain.post.QnaPost;
 import com.jsy_codes.book_lecture_shop.domain.post.status.QnaStatus;
+import com.jsy_codes.book_lecture_shop.dto.QnaPostDto;
 import com.jsy_codes.book_lecture_shop.security.CustomUserDetails;
 import com.jsy_codes.book_lecture_shop.service.QnaPostService;
 import lombok.RequiredArgsConstructor;
@@ -57,11 +58,11 @@ public class QnaPostController {
 
     @PostMapping("/write")
     public String writeQna(@AuthenticationPrincipal CustomUserDetails userDetails,
-                           @ModelAttribute QnaPost qnaPost,
+                           @ModelAttribute QnaPostDto qnaPostDto,
                            Model model) {
         try {
             validateLoggedIn(userDetails);
-            Long qnaId = qnaPostService.createQnaPost(qnaPost);
+            Long qnaId = qnaPostService.createQnaPost(qnaPostDto);
             return "redirect:/qna/" + qnaId;
         } catch (AccessDeniedException e) {
             model.addAttribute("error", "로그인이 필요합니다.");

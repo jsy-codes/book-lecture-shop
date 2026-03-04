@@ -4,6 +4,7 @@ import com.jsy_codes.book_lecture_shop.domain.User;
 import com.jsy_codes.book_lecture_shop.domain.post.QnaPost;
 import com.jsy_codes.book_lecture_shop.domain.post.status.QnaStatus;
 import com.jsy_codes.book_lecture_shop.domain.user.Role;
+import com.jsy_codes.book_lecture_shop.dto.QnaPostDto;
 import com.jsy_codes.book_lecture_shop.repository.QnaPostRepository;
 import com.jsy_codes.book_lecture_shop.repository.UserRepository;
 import com.jsy_codes.book_lecture_shop.security.SecurityUtil;
@@ -26,14 +27,17 @@ public class QnaPostService {
     private final UserService userService;
 
     @Transactional
-    public Long createQnaPost(QnaPost qnaPost) {
+    public Long createQnaPost(QnaPostDto qnaPostDto) {
         User currentUser = getCurrentUser();
+        QnaPost qnaPost = new QnaPost();
+        qnaPost.setTitle(qnaPostDto.getTitle());
+        qnaPost.setContent(qnaPostDto.getContent());
+        qnaPost.setStatus(qnaPostDto.getStatus());
+        qnaPost.setSecret(qnaPostDto.isSecret());
+        qnaPost.setCreatedAt(LocalDateTime.now());
         qnaPost.setWriter(currentUser);
-        if (qnaPost.getStatus() == null) {
-            qnaPost.setStatus(QnaStatus.OPEN);
-        }
-        QnaPost savedQna = qnaPostRepository.save(qnaPost);
-        return savedQna.getId();
+        qnaPostRepository.save(qnaPost);
+        return qnaPost.getId();
     }
 
     @Transactional

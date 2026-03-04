@@ -66,7 +66,7 @@ public class InitDB {
             System.out.println("Init1 " + this.getClass());
 
             User user = createUser(
-                    "user2@bookify.com", "password1",
+                    "user1@bookify.com", "password1",
                     "회원1", Role.AUTHOR,
                     new Address("부산", "해운대", "789-012"),
                     new PhoneNumber("010", "1234", "5678")
@@ -78,7 +78,7 @@ public class InitDB {
 
         public void dbInit2() {
             User user = createUser(
-                    "user1@bookify.com", "password2",
+                    "user2@bookify.com", "password2",
                     "회원2", Role.USER,
                     new Address("서울", "강남", "123-456"),
                     new PhoneNumber("010", "9876", "5432")

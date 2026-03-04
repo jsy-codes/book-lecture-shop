@@ -2,6 +2,7 @@ package com.jsy_codes.book_lecture_shop.service;
 
 import com.jsy_codes.book_lecture_shop.domain.post.NoticePost;
 import com.jsy_codes.book_lecture_shop.domain.user.Role;
+import com.jsy_codes.book_lecture_shop.dto.NoticePostDto;
 import com.jsy_codes.book_lecture_shop.repository.NoticePostRepository;
 import com.jsy_codes.book_lecture_shop.repository.UserRepository;
 import com.jsy_codes.book_lecture_shop.security.SecurityUtil;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.jsy_codes.book_lecture_shop.domain.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,38 +26,48 @@ public class NoticePostService {
 
 
     @Transactional
-    public Long createNoticePost(NoticePost noticePost) throws AccessDeniedException {
+    public Long createNoticePost(NoticePostDto noticePostDto) throws AccessDeniedException {
         User currentUser = getCurrentUser();
         if(!userService.hasAnyRole(currentUser, Role.ADMIN,Role.AUTHOR)) {
             throw new AccessDeniedException("You do not have permission to access this resource");
         }
+        NoticePost noticePost = new NoticePost();
         noticePost.setWriter(currentUser);
-        NoticePost savedNoticePost = noticePostRepository.save(noticePost);
-        return savedNoticePost.getId();
+        noticePost.setTitle(noticePostDto.getTitle());
+        noticePost.setContent(noticePostDto.getContent());
+        noticePost.setVisibleFrom(noticePostDto.getVisibleFrom());
+        noticePost.setVisibleTo(noticePostDto.getVisibleTo());
+        noticePost.setPriority(noticePostDto.getPriority());
+        noticePostRepository.save(noticePost);
+        return noticePost.getId();
     }
     @Transactional
-    public void updateNoticePost(NoticePost noticePost) throws AccessDeniedException {
+    public void updateNoticePost(NoticePostDto noticePostDto) throws AccessDeniedException {
         User currentUser = getCurrentUser();
         if (!userService.hasAnyRole(currentUser, Role.ADMIN, Role.AUTHOR)) {
             throw new AccessDeniedException("공지 수정 권한 없음");
         }
 
-        Optional<NoticePost> optionalNotice = noticePostRepository.findById(noticePost.getId());
+        Optional<NoticePost> optionalNotice = noticePostRepository.findById(noticePostDto.getId());
         if (optionalNotice.isEmpty()) {
             throw new IllegalArgumentException("공지글 없음");
         }
 
         NoticePost findNotice = optionalNotice.get();
-        findNotice.setTitle(noticePost.getTitle());
-        findNotice.setContent(noticePost.getContent());
-        findNotice.setPinned(noticePost.isPinned());
-        findNotice.setPriority(noticePost.getPriority());
-        findNotice.setVisibleFrom(noticePost.getVisibleFrom());
-        findNotice.setVisibleTo(noticePost.getVisibleTo());
+        findNotice.setTitle(noticePostDto.getTitle());
+        findNotice.setContent(noticePostDto.getContent());
+        findNotice.setPinned(noticePostDto.isPinned());
+        findNotice.setPriority(noticePostDto.getPriority());
+        findNotice.setVisibleFrom(noticePostDto.getVisibleFrom());
+        findNotice.setVisibleTo(noticePostDto.getVisibleTo());
     }
 
     public List<NoticePost> findAll() {
         return noticePostRepository.findAllByOrderByPinnedDescPriorityDescCreatedAtDesc();
+    }
+    public List<NoticePost> findActiveNoticePosts() {
+        LocalDateTime now = LocalDateTime.now();
+        return noticePostRepository.findActiveNoticePosts(now);
     }
 
     public NoticePost findById(Long id) {

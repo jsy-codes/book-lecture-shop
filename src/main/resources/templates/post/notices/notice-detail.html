@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${notice.title}">공지 상세</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-body">
+
+            <!-- 제목 + 고정 뱃지 -->
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="card-title mb-0" th:text="${notice.title}">공지 제목</h3>
+                <span th:if="${notice.pinned}"
+                      class="badge bg-warning text-dark">고정 공지</span>
+            </div>
+
+            <!-- 작성일 -->
+            <p class="text-muted mt-2 mb-1"
+               th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd HH:mm')}">
+                작성일
+            </p>
+
+            <!-- 노출 기간 -->
+            <p class="text-muted"
+               th:if="${notice.visibleFrom != null}"
+               th:text="|노출 기간: ${notice.visibleFrom} ~ ${notice.visibleTo}|">
+                노출 기간
+            </p>
+
+            <hr>
+
+            <!-- 공지 내용 -->
+            <div class="mb-4"
+                 style="white-space: pre-wrap;"
+                 th:text="${notice.content}">
+                공지 내용
+            </div>
+
+            <!-- 버튼 영역 -->
+            <div class="d-flex gap-2">
+                <a href="/notices" class="btn btn-secondary">목록</a>
+
+                <!-- 관리자만 수정 버튼 노출 -->
+                <a th:if="${isAdmin}"
+                   th:href="@{/notices/{id}/edit(id=${notice.id})}"
+                   class="btn btn-primary">
+                    수정
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
