@@ -8,13 +8,22 @@
 <body>
 <div class="container mt-4" style="max-width: 960px;">
     <div class="card mb-3">
-        <div class="card-body">
-            <h3 class="card-title" th:text="${qnaPost.title}">질문 제목</h3>
-            <div class="d-flex gap-2 mb-2">
-                <span class="badge text-bg-secondary" th:text="${qnaPost.status}">OPEN</span>
-                <span class="badge text-bg-dark" th:if="${qnaPost.secret}">비밀글</span>
+        <div class="card-body" >
+            <!-- 볼 수 있는 경우 -->
+            <div th:if="${isCanView}">
+
+                <h3 class="card-title" th:text="${qnaPost.title}">질문 제목</h3>
+                <div class="d-flex gap-2 mb-2">
+                    <span class="badge text-bg-secondary" th:text="${qnaPost.status}">OPEN</span>
+                    <span class="badge text-bg-dark" th:if="${qnaPost.secret}">비밀글</span>
+                </div>
+                <p class="card-text" style="white-space: pre-wrap;" th:text="${qnaPost.content}">질문 내용</p>
             </div>
-            <p class="card-text" style="white-space: pre-wrap;" th:text="${qnaPost.content}">질문 내용</p>
+            <!-- 볼 수 없는 경우 -->
+            <div th:unless="${isCanView}">
+                <h5>🔒 비밀글입니다.</h5>
+                <p class="text-muted">작성자와 관리자만 볼 수 있습니다.</p>
+            </div>
         </div>
     </div>
 
@@ -40,6 +49,15 @@
         <button class="btn btn-outline-danger" type="submit">질문 종료</button>
     </form>
     <a href="/qna" class="btn btn-secondary">목록</a>
+    <form th:if="${isAdmin}"
+          th:action="@{/qna/{id}/delete(id=${qnaPost.id})}"
+          method="post"
+          onsubmit="return confirm('정말 삭제하시겠습니까?');">
+
+        <button type="submit" class="btn btn-danger">
+            삭제
+        </button>
+    </form>
 </div>
 </body>
 </html>

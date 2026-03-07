@@ -62,8 +62,8 @@ public class NoticePostService {
         findNotice.setVisibleTo(noticePostDto.getVisibleTo());
     }
 
-    public List<NoticePost> findAll() {
-        return noticePostRepository.findAllByOrderByPinnedDescPriorityDescCreatedAtDesc();
+    public List<NoticePost> findAllNotDeleted() {
+        return noticePostRepository.findAllNotDeleted();
     }
     public List<NoticePost> findActiveNoticePosts() {
         LocalDateTime now = LocalDateTime.now();
@@ -89,5 +89,16 @@ public class NoticePostService {
             throw new IllegalArgumentException("No current user 2");
         }
         return currentUser;
+    }
+
+    public void deleteNotice(User user, Long id) {
+        NoticePost post = noticePostRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("post not found"));
+
+        if (user.getRole() != Role.ADMIN) {
+            throw new AccessDeniedException("삭제 권한 없음");
+        }
+
+        post.delete();
     }
 }

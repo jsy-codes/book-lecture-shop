@@ -10,8 +10,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
-    public String handleAccessDenied(AccessDeniedException e, RedirectAttributes ra) {
-        ra.addFlashAttribute("errorMessage", e.getMessage());
-        return "redirect:/courses"; // 또는 redirect
+    public String handleAccessDenied(AccessDeniedException e, Model model) {
+        model.addAttribute("errorMessage", e.getMessage());
+        return "error/alert.html"; // 또는 redirect
     }
 }

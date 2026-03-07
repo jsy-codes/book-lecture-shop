@@ -1,6 +1,7 @@
 package com.jsy_codes.book_lecture_shop.service;
 
 import com.jsy_codes.book_lecture_shop.domain.User;
+import com.jsy_codes.book_lecture_shop.domain.post.NoticePost;
 import com.jsy_codes.book_lecture_shop.domain.post.QnaPost;
 import com.jsy_codes.book_lecture_shop.domain.post.status.QnaStatus;
 import com.jsy_codes.book_lecture_shop.domain.user.Role;
@@ -9,10 +10,11 @@ import com.jsy_codes.book_lecture_shop.repository.QnaPostRepository;
 import com.jsy_codes.book_lecture_shop.repository.UserRepository;
 import com.jsy_codes.book_lecture_shop.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.AccessDeniedException;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +43,7 @@ public class QnaPostService {
     }
 
     @Transactional
-    public void answerQna(Long qnaId, String answerContent) throws AccessDeniedException {
+    public void answerQna(Long qnaId, String answerContent)  {
         User currentUser = getCurrentUser();
         if (!userService.hasAnyRole(currentUser, Role.ADMIN, Role.AUTHOR)) {
             throw new AccessDeniedException("답변 권한 없음");
@@ -58,18 +60,21 @@ public class QnaPostService {
         qnaPost.setAnsweredAt(LocalDateTime.now());
         qnaPost.setStatus(QnaStatus.ANSWERED);
     }
+    public List<QnaPost> findActiveQnaPosts() {
+        return qnaPostRepository.findByDeletedAtIsNullOrderByCreatedAtDesc();
+    }
 
     @Transactional
-    public void closeQna(Long qnaId) throws AccessDeniedException {
+    public void closeQna(Long qnaId) {
+
         User currentUser = getCurrentUser();
-        Optional<QnaPost> optionalQnaPost = qnaPostRepository.findById(qnaId);
-        if (optionalQnaPost.isEmpty()) {
-            throw new IllegalArgumentException("질문글 없음");
-        }
 
-        QnaPost qnaPost = optionalQnaPost.get();
+        QnaPost qnaPost = qnaPostRepository.findById(qnaId)
+                .orElseThrow(() -> new IllegalArgumentException("질문글 없음"));
 
-        boolean isWriter = qnaPost.getWriter() != null && qnaPost.getWriter().getId().equals(currentUser.getId());
+        boolean isWriter = qnaPost.getWriter() != null
+                && qnaPost.getWriter().getId().equals(currentUser.getId());
+
         boolean isManager = userService.hasAnyRole(currentUser, Role.ADMIN, Role.AUTHOR);
 
         if (!isWriter && !isManager) {
@@ -80,7 +85,9 @@ public class QnaPostService {
     }
 
     public QnaPost findById(Long id) {
-        return qnaPostRepository.findById(id).orElse(null);
+        return qnaPostRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("QnaPost not found"));
+
     }
 
     public List<QnaPost> findAll() {
@@ -93,7 +100,7 @@ public class QnaPostService {
     }
 
     public List<QnaPost> findByStatus(QnaStatus status) {
-        return qnaPostRepository.findByStatusOrderByCreatedAtDesc(status);
+        return qnaPostRepository.findByDeletedAtIsNullAndStatusOrderByCreatedAtDesc(status);
     }
 
     private User getCurrentUser() {
@@ -107,5 +114,37 @@ public class QnaPostService {
             throw new IllegalArgumentException("사용자 없음");
         }
         return currentUser;
+    }
+    @Transactional
+    public void deleteNotice(User user, Long id) {
+        QnaPost post = qnaPostRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("post not found"));
+
+        if (user.getRole() != Role.ADMIN) {
+            throw new AccessDeniedException("삭제 권한 없음");
+        }
+
+
+        post.delete();
+    }
+
+    public boolean canView(QnaPost qnaPost, User user) {
+
+        // 비밀글 아니면 누구나 가능
+        if (!qnaPost.isSecret()) {
+            return true;
+        }
+
+        if (user == null) {
+            return false;
+        }
+
+        // 관리자
+        if (userService.hasAnyRole(user,Role.ADMIN, Role.AUTHOR)) {
+            return true;
+        }
+
+        // 작성자
+        return qnaPost.getWriter().getId().equals(user.getId());
     }
 }

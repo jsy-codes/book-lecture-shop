@@ -28,7 +28,7 @@ public class BookPostController {
     private final CourseService courseService;
     //book
     @GetMapping("/books")
-    public String books(@RequestParam(value = "category",required = false) CategoryType categoryType, Model model,
+    public String books(@RequestParam(value = "categoryType",required = false) CategoryType categoryType, Model model,
                         @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         List<BookPost> bookPosts;

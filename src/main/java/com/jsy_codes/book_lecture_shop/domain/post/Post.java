@@ -28,8 +28,14 @@ public abstract class Post {
 
     protected LocalDateTime createdAt;
 
+    protected LocalDateTime deletedAt;  // soft delete 필드
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
     }
 }

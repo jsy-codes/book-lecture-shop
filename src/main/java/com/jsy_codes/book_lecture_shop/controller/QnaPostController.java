@@ -1,17 +1,21 @@
 package com.jsy_codes.book_lecture_shop.controller;
 
+import com.jsy_codes.book_lecture_shop.domain.User;
 import com.jsy_codes.book_lecture_shop.domain.post.QnaPost;
 import com.jsy_codes.book_lecture_shop.domain.post.status.QnaStatus;
+import com.jsy_codes.book_lecture_shop.domain.user.Role;
 import com.jsy_codes.book_lecture_shop.dto.QnaPostDto;
 import com.jsy_codes.book_lecture_shop.security.CustomUserDetails;
 import com.jsy_codes.book_lecture_shop.service.QnaPostService;
+import com.jsy_codes.book_lecture_shop.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
+
 import java.util.List;
 
 @Controller
@@ -20,11 +24,12 @@ import java.util.List;
 public class QnaPostController {
 
     private final QnaPostService qnaPostService;
+    private final UserService userService;
 
     @GetMapping
     public String qnaList(@RequestParam(required = false) QnaStatus status, Model model) {
         List<QnaPost> qnaPosts = (status == null)
-                ? qnaPostService.findAll()
+                ? qnaPostService.findActiveQnaPosts()
                 : qnaPostService.findByStatus(status);
 
         model.addAttribute("qnaPosts", qnaPosts);
@@ -40,13 +45,20 @@ public class QnaPostController {
     }
 
     @GetMapping("/{id}")
-    public String qnaDetail(@PathVariable Long id, Model model) {
+    public String qnaDetail(@PathVariable Long id,
+                            @AuthenticationPrincipal CustomUserDetails  userDetails,
+                            Model model) {
         QnaPost qnaPost = qnaPostService.findById(id);
-        if (qnaPost == null) {
-            return "error/404";
-        }
 
+        User user = userDetails != null ? userDetails.getUser() : null;
+
+
+        boolean isCanView = qnaPostService.canView(qnaPost, user);
+        boolean isAdmin = user != null && userService.hasAnyRole(user, Role.ADMIN, Role.AUTHOR);
+
+        model.addAttribute("isAdmin",isAdmin);
         model.addAttribute("qnaPost", qnaPost);
+        model.addAttribute("isCanView", isCanView);
         return "post/qna/qna-detail";
     }
 
@@ -60,14 +72,12 @@ public class QnaPostController {
     public String writeQna(@AuthenticationPrincipal CustomUserDetails userDetails,
                            @ModelAttribute QnaPostDto qnaPostDto,
                            Model model) {
-        try {
-            validateLoggedIn(userDetails);
-            Long qnaId = qnaPostService.createQnaPost(qnaPostDto);
-            return "redirect:/qna/" + qnaId;
-        } catch (AccessDeniedException e) {
-            model.addAttribute("error", "로그인이 필요합니다.");
-            return "error/403";
-        }
+
+        validateLoggedIn(userDetails);
+        Long qnaId = qnaPostService.createQnaPost(qnaPostDto);
+        return "redirect:/qna/" + qnaId;
+
+
     }
 
     @PostMapping("/{id}/answer")
@@ -75,33 +85,46 @@ public class QnaPostController {
                             @AuthenticationPrincipal CustomUserDetails userDetails,
                             @RequestParam String answerContent,
                             Model model) {
-        try {
-            validateLoggedIn(userDetails);
+
+            validateManager(userDetails);
             qnaPostService.answerQna(id, answerContent);
             return "redirect:/qna/" + id;
-        } catch (AccessDeniedException e) {
-            model.addAttribute("error", "답변 권한이 없습니다.");
-            return "error/403";
-        }
+
     }
 
     @PostMapping("/{id}/close")
     public String closeQna(@PathVariable Long id,
                            @AuthenticationPrincipal CustomUserDetails userDetails,
                            Model model) {
-        try {
-            validateLoggedIn(userDetails);
+
+            validateManager(userDetails);
             qnaPostService.closeQna(id);
             return "redirect:/qna/" + id;
-        } catch (AccessDeniedException e) {
-            model.addAttribute("error", "종료 권한이 없습니다.");
-            return "error/403";
-        }
+
+
+    }
+    @PostMapping("/{id}/delete")
+    public String deleteQna(@PathVariable Long id,
+                               @AuthenticationPrincipal CustomUserDetails userDetails) {
+        validateManager(userDetails);
+        qnaPostService.deleteNotice(userDetails.getUser(),id);
+
+        return "redirect:/qna";
     }
 
-    private void validateLoggedIn(CustomUserDetails userDetails) throws AccessDeniedException {
+    private void validateLoggedIn(CustomUserDetails userDetails)  {
         if (userDetails == null) {
             throw new AccessDeniedException("로그인이 필요합니다.");
+        }
+    }
+    private void validateManager(CustomUserDetails userDetails)  {
+        if (userDetails == null) {
+            throw new AccessDeniedException("로그인이 필요합니다.");
+        }
+
+        User user = userDetails.getUser();
+        if (!userService.hasAnyRole(user, Role.ADMIN)) {
+            throw new AccessDeniedException("권한이 없습니다.");
         }
     }
 }

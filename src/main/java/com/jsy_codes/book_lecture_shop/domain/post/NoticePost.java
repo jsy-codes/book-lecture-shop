@@ -30,4 +30,6 @@ public class NoticePost extends Post {
      * 중요도(숫자가 클수록 중요)
      */
     private int priority;
+
+
 }

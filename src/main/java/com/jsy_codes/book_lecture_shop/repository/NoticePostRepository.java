@@ -11,7 +11,14 @@ import java.util.List;
 
 @Repository
 public interface NoticePostRepository extends JpaRepository<NoticePost, Long> {
-    List<NoticePost> findAllByOrderByPinnedDescPriorityDescCreatedAtDesc();
+    //List<NoticePost> findAllByOrderByPinnedDescPriorityDescCreatedAtDesc();
+
+    @Query("""
+    SELECT np FROM NoticePost np
+    WHERE np.deletedAt IS NULL
+    ORDER BY np.pinned DESC, np.priority DESC, np.createdAt DESC
+    """)
+    List<NoticePost> findAllNotDeleted();
 
     List<NoticePost> findByPinnedTrueOrderByPriorityDescCreatedAtDesc();
 
@@ -19,6 +26,7 @@ public interface NoticePostRepository extends JpaRepository<NoticePost, Long> {
         SELECT np FROM NoticePost np
         WHERE np.visibleFrom <= :now
                 AND np.visibleTo >= :now
+                AND np.deletedAt IS NULL
         ORDER BY np.pinned DESC, np.priority DESC, np.createdAt DESC
         """)
     List<NoticePost> findActiveNoticePosts(@Param("now") LocalDateTime now);

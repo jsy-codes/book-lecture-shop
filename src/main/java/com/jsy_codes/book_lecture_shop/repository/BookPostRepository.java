@@ -45,7 +45,7 @@ public class BookPostRepository {
     }
     public List<BookPost> findByCategoryType(CategoryType categoryType) {
         return em.createQuery("SELECT b from BookPost b where b.categoryType = :categoryType",BookPost.class)
-                .setParameter("categoryType",categoryType)
+                .setParameter("categoryType", categoryType)
                 .getResultList();
 
     }

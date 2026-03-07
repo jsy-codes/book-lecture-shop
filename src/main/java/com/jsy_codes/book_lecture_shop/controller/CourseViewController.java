@@ -27,7 +27,7 @@ public class CourseViewController {
 
     @GetMapping
     public String myCourses(@AuthenticationPrincipal CustomUserDetails user,
-                            @RequestParam(value = "category", required = false)CategoryType categoryType,
+                            @RequestParam(value = "categoryType", required = false) CategoryType categoryType,
                             Model model) {
         model.addAttribute("courses", courseService.getCourseList(categoryType));
         model.addAttribute("loginUser", user.getUser());

@@ -9,6 +9,7 @@ import com.jsy_codes.book_lecture_shop.service.NoticePostService;
 import com.jsy_codes.book_lecture_shop.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +31,7 @@ public class NoticePostController {
         List<NoticePost> notices;
 
         if(customUserDetails != null && userService.hasAnyRole(customUserDetails.getUser(), Role.ADMIN)) {
-            notices = noticePostService.findAll();
+            notices = noticePostService.findAllNotDeleted();
         }else{
             notices = noticePostService.findActiveNoticePosts();
         }
@@ -96,6 +97,14 @@ public class NoticePostController {
         noticePostService.updateNoticePost(noticePostDto);
         return "redirect:/notices/" + id;
 
+    }
+    @PostMapping("/{id}/delete")
+    public String deleteNotice(@PathVariable Long id,
+                               @AuthenticationPrincipal CustomUserDetails userDetails) {
+        validateManager(userDetails);
+        noticePostService.deleteNotice(userDetails.getUser(),id);
+
+        return "redirect:/notices";
     }
 
     private void validateManager(CustomUserDetails userDetails)  {
