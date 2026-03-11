@@ -9,6 +9,9 @@ import com.jsy_codes.book_lecture_shop.security.CustomUserDetails;
 import com.jsy_codes.book_lecture_shop.service.QnaPostService;
 import com.jsy_codes.book_lecture_shop.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -27,13 +30,20 @@ public class QnaPostController {
     private final UserService userService;
 
     @GetMapping
-    public String qnaList(@RequestParam(required = false) QnaStatus status, Model model) {
-        List<QnaPost> qnaPosts = (status == null)
-                ? qnaPostService.findActiveQnaPosts()
-                : qnaPostService.findByStatus(status);
+    public String qnaList(
+            @RequestParam(required = false) QnaStatus status,
+            @RequestParam(defaultValue = "0") int page,
+            Model model) {
+
+        Pageable pageable = PageRequest.of(page, 10);
+
+        Page<QnaPost> qnaPosts = (status == null)
+                ? qnaPostService.findActiveQnaPosts(pageable)
+                : qnaPostService.findByStatus(status, pageable);
 
         model.addAttribute("qnaPosts", qnaPosts);
         model.addAttribute("selectedStatus", status);
+
         return "post/qna/qna-list";
     }
 

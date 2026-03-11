@@ -1,6 +1,8 @@
 package com.jsy_codes.book_lecture_shop.repository;
 
 import com.jsy_codes.book_lecture_shop.domain.post.NoticePost;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,6 +13,9 @@ import java.util.List;
 
 @Repository
 public interface NoticePostRepository extends JpaRepository<NoticePost, Long> {
+
+
+    List<NoticePost> findTop3ByOrderByCreatedAtDesc();
     //List<NoticePost> findAllByOrderByPinnedDescPriorityDescCreatedAtDesc();
 
     @Query("""
@@ -18,7 +23,7 @@ public interface NoticePostRepository extends JpaRepository<NoticePost, Long> {
     WHERE np.deletedAt IS NULL
     ORDER BY np.pinned DESC, np.priority DESC, np.createdAt DESC
     """)
-    List<NoticePost> findAllNotDeleted();
+    Page<NoticePost> findAllNotDeleted(Pageable pageable);
 
     List<NoticePost> findByPinnedTrueOrderByPriorityDescCreatedAtDesc();
 
@@ -29,5 +34,7 @@ public interface NoticePostRepository extends JpaRepository<NoticePost, Long> {
                 AND np.deletedAt IS NULL
         ORDER BY np.pinned DESC, np.priority DESC, np.createdAt DESC
         """)
-    List<NoticePost> findActiveNoticePosts(@Param("now") LocalDateTime now);
+    Page<NoticePost> findActiveNoticePosts(@Param("now") LocalDateTime now, Pageable pageable);
+
+
 }

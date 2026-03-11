@@ -8,6 +8,9 @@ import com.jsy_codes.book_lecture_shop.security.CustomUserDetails;
 import com.jsy_codes.book_lecture_shop.service.NoticePostService;
 import com.jsy_codes.book_lecture_shop.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,13 +30,14 @@ public class NoticePostController {
 
     @GetMapping
     public String noticeList(@AuthenticationPrincipal CustomUserDetails customUserDetails,
+                             @RequestParam(defaultValue = "0") int page,
                              Model model) {
-        List<NoticePost> notices;
-
+        Page<NoticePost> notices;
+        Pageable pageable = PageRequest.of(page, 10);
         if(customUserDetails != null && userService.hasAnyRole(customUserDetails.getUser(), Role.ADMIN)) {
-            notices = noticePostService.findAllNotDeleted();
+            notices = noticePostService.findAllNotDeleted(pageable);
         }else{
-            notices = noticePostService.findActiveNoticePosts();
+            notices = noticePostService.findActiveNoticePosts(pageable);
         }
 
         model.addAttribute("notices", notices);

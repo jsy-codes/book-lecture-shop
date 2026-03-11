@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+<div th:replace="fragments/navbar :: navbar"></div>
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h2>공지사항</h2>
@@ -24,7 +25,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="notice : ${notices}">
+            <tr th:each="notice : ${notices.content}">
                 <td th:text="${notice.id}">1</td>
                 <td>
                     <a class="text-decoration-none" th:href="@{/notices/{id}(id=${notice.id})}" th:text="${notice.title}">제목</a>
@@ -36,11 +37,44 @@
                 <td th:text="${notice.priority}">0</td>
                 <td th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd HH:mm')}">2026-01-01 12:00</td>
             </tr>
-            <tr th:if="${#lists.isEmpty(notices)}">
+            <tr th:if="${notices.totalElements == 0}">
                 <td colspan="5" class="text-center text-muted">등록된 공지가 없습니다.</td>
             </tr>
             </tbody>
         </table>
+        <nav th:if="${notices.totalPages > 1}">
+            <ul class="pagination justify-content-center">
+
+                <!-- 이전 -->
+                <li class="page-item" th:classappend="${notices.first} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/notices(page=${notices.number - 1})}">
+                        이전
+                    </a>
+                </li>
+
+                <!-- 페이지 번호 -->
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence(0, notices.totalPages - 1)}"
+                    th:classappend="${i == notices.number} ? 'active'">
+
+                    <a class="page-link"
+                       th:href="@{/notices(page=${i})}"
+                       th:text="${i + 1}">
+                    </a>
+
+                </li>
+
+                <!-- 다음 -->
+                <li class="page-item" th:classappend="${notices.last} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/notices(page=${notices.number + 1})}">
+                        다음
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
     </div>
 </div>
 </body>

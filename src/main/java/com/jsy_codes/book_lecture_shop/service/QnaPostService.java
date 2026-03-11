@@ -10,9 +10,12 @@ import com.jsy_codes.book_lecture_shop.repository.QnaPostRepository;
 import com.jsy_codes.book_lecture_shop.repository.UserRepository;
 import com.jsy_codes.book_lecture_shop.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 
 import java.time.LocalDateTime;
@@ -60,8 +63,8 @@ public class QnaPostService {
         qnaPost.setAnsweredAt(LocalDateTime.now());
         qnaPost.setStatus(QnaStatus.ANSWERED);
     }
-    public List<QnaPost> findActiveQnaPosts() {
-        return qnaPostRepository.findByDeletedAtIsNullOrderByCreatedAtDesc();
+    public Page<QnaPost> findActiveQnaPosts(Pageable pageable) {
+        return qnaPostRepository.findByDeletedAtIsNullOrderByStatusAscCreatedAtDesc(pageable);
     }
 
     @Transactional
@@ -99,8 +102,8 @@ public class QnaPostService {
         return qnaPostRepository.findByWriterOrderByCreatedAtDesc(currentUser);
     }
 
-    public List<QnaPost> findByStatus(QnaStatus status) {
-        return qnaPostRepository.findByDeletedAtIsNullAndStatusOrderByCreatedAtDesc(status);
+    public Page<QnaPost> findByStatus(QnaStatus status, Pageable pageable) {
+        return qnaPostRepository.findByDeletedAtIsNullAndStatusOrderByCreatedAtDesc(status,pageable);
     }
 
     private User getCurrentUser() {
@@ -147,4 +150,6 @@ public class QnaPostService {
         // 작성자
         return qnaPost.getWriter().getId().equals(user.getId());
     }
+
+
 }

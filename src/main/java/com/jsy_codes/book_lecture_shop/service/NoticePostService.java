@@ -7,6 +7,8 @@ import com.jsy_codes.book_lecture_shop.repository.NoticePostRepository;
 import com.jsy_codes.book_lecture_shop.repository.UserRepository;
 import com.jsy_codes.book_lecture_shop.security.SecurityUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,12 +64,12 @@ public class NoticePostService {
         findNotice.setVisibleTo(noticePostDto.getVisibleTo());
     }
 
-    public List<NoticePost> findAllNotDeleted() {
-        return noticePostRepository.findAllNotDeleted();
+    public Page<NoticePost> findAllNotDeleted(Pageable pageable) {
+        return noticePostRepository.findAllNotDeleted(pageable);
     }
-    public List<NoticePost> findActiveNoticePosts() {
+    public Page<NoticePost> findActiveNoticePosts(Pageable pageable) {
         LocalDateTime now = LocalDateTime.now();
-        return noticePostRepository.findActiveNoticePosts(now);
+        return noticePostRepository.findActiveNoticePosts(now, pageable);
     }
 
     public NoticePost findById(Long id) {
@@ -101,4 +103,6 @@ public class NoticePostService {
 
         post.delete();
     }
+
+
 }
